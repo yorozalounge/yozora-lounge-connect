@@ -3,12 +3,19 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index.tsx";
 import TalentsPage from "./pages/Talents.tsx";
 import HowItWorksPage from "./pages/HowItWorks.tsx";
 import JoinPage from "./pages/Join.tsx";
 import CreditsPage from "./pages/Credits.tsx";
 import ContactPage from "./pages/Contact.tsx";
+import Login from "./pages/Login.tsx";
+import SignupClient from "./pages/SignupClient.tsx";
+import SignupTalent from "./pages/SignupTalent.tsx";
+import ClientDashboard from "./pages/ClientDashboard.tsx";
+import TalentDashboard from "./pages/TalentDashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -18,17 +25,38 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/talents" element={<TalentsPage />} />
-          <Route path="/how-it-works" element={<HowItWorksPage />} />
-          <Route path="/join" element={<JoinPage />} />
-          <Route path="/credits" element={<CreditsPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/talents" element={<TalentsPage />} />
+            <Route path="/how-it-works" element={<HowItWorksPage />} />
+            <Route path="/join" element={<JoinPage />} />
+            <Route path="/credits" element={<CreditsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup/client" element={<SignupClient />} />
+            <Route path="/signup/talent" element={<SignupTalent />} />
+            <Route
+              path="/client-dashboard"
+              element={
+                <ProtectedRoute requiredRole="client">
+                  <ClientDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/talent-dashboard"
+              element={
+                <ProtectedRoute requiredRole="talent">
+                  <TalentDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
