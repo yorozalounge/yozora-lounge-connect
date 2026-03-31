@@ -22,7 +22,7 @@ const SignupClient = () => {
       password,
       options: {
         data: { full_name: fullName, role: "client" },
-        emailRedirectTo: `${window.location.origin}/client-dashboard`,
+        emailRedirectTo: window.location.origin,
       },
     });
     setLoading(false);
@@ -49,8 +49,7 @@ const SignupClient = () => {
               Please check your email to verify your account before signing in.
             </p>
             <p className="text-ivory-muted text-xs mb-8 opacity-60">
-              We sent a verification link to <span className="text-gold">{email}</span>. 
-              Click the link in the email to activate your account.
+              We sent a verification link to <span className="text-gold">{email}</span>.
             </p>
             <Link to="/login" className="btn-gold-outline text-xs py-2 px-8 inline-block">
               Go to Sign In
@@ -76,34 +75,18 @@ const SignupClient = () => {
         <form onSubmit={handleSignup} className="space-y-6">
           <div>
             <label className="small-caps-ivory text-[10px] opacity-70 block mb-2">Full Name</label>
-            <input
-              type="text"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full bg-secondary border border-gold-subtle px-4 py-3 text-ivory text-sm font-body focus:outline-none focus:border-primary transition-colors"
-            />
+            <input type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)}
+              className="w-full bg-secondary border border-gold-subtle px-4 py-3 text-ivory text-sm font-body focus:outline-none focus:border-primary transition-colors" />
           </div>
           <div>
             <label className="small-caps-ivory text-[10px] opacity-70 block mb-2">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-secondary border border-gold-subtle px-4 py-3 text-ivory text-sm font-body focus:outline-none focus:border-primary transition-colors"
-            />
+            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-secondary border border-gold-subtle px-4 py-3 text-ivory text-sm font-body focus:outline-none focus:border-primary transition-colors" />
           </div>
           <div>
             <label className="small-caps-ivory text-[10px] opacity-70 block mb-2">Password</label>
-            <input
-              type="password"
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-secondary border border-gold-subtle px-4 py-3 text-ivory text-sm font-body focus:outline-none focus:border-primary transition-colors"
-            />
+            <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-secondary border border-gold-subtle px-4 py-3 text-ivory text-sm font-body focus:outline-none focus:border-primary transition-colors" />
           </div>
           <button type="submit" disabled={loading} className="btn-gold-solid w-full">
             {loading ? "Creating account..." : "Create Account"}
@@ -112,9 +95,7 @@ const SignupClient = () => {
 
         <p className="mt-8 text-center text-ivory-muted text-sm">
           Already have an account?{" "}
-          <Link to="/login" className="text-gold hover:text-gold-light transition-colors">
-            Sign in
-          </Link>
+          <Link to="/login" className="text-gold hover:text-gold-light transition-colors">Sign in</Link>
         </p>
       </div>
       <Footer />

@@ -46,7 +46,6 @@ const SignupTalent = () => {
 
     setLoading(true);
 
-    // 1. Sign up the user
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -60,7 +59,7 @@ const SignupTalent = () => {
           motivation,
           role: "talent",
         },
-        emailRedirectTo: `${window.location.origin}/talent-dashboard`,
+        emailRedirectTo: window.location.origin,
       },
     });
 
@@ -77,7 +76,7 @@ const SignupTalent = () => {
       return;
     }
 
-    // 2. Upload photo
+    // Upload photo
     const photoExt = photo.name.split(".").pop();
     const photoPath = `${userId}/photo.${photoExt}`;
     const { error: photoErr } = await supabase.storage.from("talent-photos").upload(photoPath, photo);
@@ -85,13 +84,12 @@ const SignupTalent = () => {
       ? ""
       : supabase.storage.from("talent-photos").getPublicUrl(photoPath).data.publicUrl;
 
-    // 3. Upload ID document
+    // Upload ID document
     const idExt = idDoc.name.split(".").pop();
     const idPath = `${userId}/id-doc.${idExt}`;
     await supabase.storage.from("talent-id-docs").upload(idPath, idDoc);
-    const idDocUrl = idPath; // Store path, admin fetches signed URL
 
-    // 4. Insert talent application
+    // Insert talent application
     await supabase.from("talent_applications" as any).insert({
       user_id: userId,
       full_name: fullName,
@@ -102,11 +100,11 @@ const SignupTalent = () => {
       languages,
       motivation,
       photo_url: photoUrl,
-      id_document_url: idDocUrl,
+      id_document_url: idPath,
       status: "pending",
     } as any);
 
-    // 5. Send admin notification email
+    // Send notification email
     await supabase.functions.invoke("send-transactional-email", {
       body: {
         templateName: "new-talent-application",
@@ -141,7 +139,6 @@ const SignupTalent = () => {
             </p>
             <p className="text-ivory-muted text-xs mb-8 opacity-60">
               We sent a verification link to <span className="text-gold">{email}</span>.
-              Click the link in the email to activate your account.
             </p>
             <Link to="/login" className="btn-gold-outline text-xs py-2 px-8 inline-block">
               Go to Sign In
@@ -178,7 +175,6 @@ const SignupTalent = () => {
         </div>
 
         <form onSubmit={handleSignup} className="space-y-6">
-          {/* Account credentials */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="small-caps-gold text-[10px] block mb-2">Email</label>
@@ -192,7 +188,6 @@ const SignupTalent = () => {
             </div>
           </div>
 
-          {/* Personal details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="small-caps-gold text-[10px] block mb-2">Full Legal Name</label>
