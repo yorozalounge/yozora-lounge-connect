@@ -132,9 +132,20 @@ const ClientDashboard = () => {
                         {b.credits_charged.toLocaleString()} credits
                       </p>
                     </div>
-                    <button className="btn-gold-solid text-[10px] py-2 px-4 flex items-center gap-1.5">
-                      <Video size={12} /> Join
-                    </button>
+                    {b.room_url ? (
+                      <a
+                        href={b.room_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-gold-solid text-[10px] py-2 px-4 flex items-center gap-1.5"
+                      >
+                        <Video size={12} /> Join
+                      </a>
+                    ) : (
+                      <button className="btn-gold-solid text-[10px] py-2 px-4 flex items-center gap-1.5 opacity-50" disabled>
+                        <Video size={12} /> Join
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
