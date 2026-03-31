@@ -150,8 +150,33 @@ const TalentProfile = () => {
       </section>
 
       <section className="pb-16 px-6 lg:px-12 max-w-6xl mx-auto">
-        <TalentReviews talent={talent} />
+        <TalentReviews talent={talent} key={reviewsKey} />
+
+        {unreviewedBooking && (
+          <div className="mt-6 pt-6 border-t border-border">
+            <button
+              onClick={() => setShowReviewDialog(true)}
+              className="btn-gold-solid text-xs"
+            >
+              Leave a Review for {talent.name}
+            </button>
+          </div>
+        )}
       </section>
+
+      {showReviewDialog && unreviewedBooking && (
+        <ReviewSessionDialog
+          bookingId={unreviewedBooking.id}
+          talentId={unreviewedBooking.talent_id}
+          talentName={unreviewedBooking.talent_name}
+          reviewerName={profileName}
+          onClose={() => setShowReviewDialog(false)}
+          onSubmitted={() => {
+            setShowReviewDialog(false);
+            setReviewsKey((k) => k + 1);
+          }}
+        />
+      )}
 
       {/* Sticky booking bar */}
       <div className="sticky bottom-0 bg-card-dark border-t border-gold-subtle py-4 px-6 z-40">
