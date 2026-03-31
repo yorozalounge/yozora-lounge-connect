@@ -269,42 +269,63 @@ export type Database = {
         Row: {
           admin_notes: string | null
           bio: string | null
+          country: string | null
           created_at: string
+          date_of_birth: string | null
           email: string
           full_name: string
           id: string
+          id_document_url: string | null
+          languages: string | null
+          motivation: string | null
+          photo_url: string | null
           portfolio_url: string | null
           reviewed_at: string | null
           reviewed_by: string | null
           specialty: string | null
+          stage_name: string | null
           status: string
           user_id: string
         }
         Insert: {
           admin_notes?: string | null
           bio?: string | null
+          country?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string
           full_name?: string
           id?: string
+          id_document_url?: string | null
+          languages?: string | null
+          motivation?: string | null
+          photo_url?: string | null
           portfolio_url?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           specialty?: string | null
+          stage_name?: string | null
           status?: string
           user_id: string
         }
         Update: {
           admin_notes?: string | null
           bio?: string | null
+          country?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string
           full_name?: string
           id?: string
+          id_document_url?: string | null
+          languages?: string | null
+          motivation?: string | null
+          photo_url?: string | null
           portfolio_url?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           specialty?: string | null
+          stage_name?: string | null
           status?: string
           user_id?: string
         }

@@ -58,6 +58,13 @@ interface TalentApplication {
   user_id: string;
   full_name: string;
   email: string;
+  stage_name: string;
+  date_of_birth: string | null;
+  country: string;
+  languages: string;
+  motivation: string;
+  photo_url: string;
+  id_document_url: string;
   bio: string;
   specialty: string;
   portfolio_url: string;
