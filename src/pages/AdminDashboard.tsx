@@ -302,6 +302,11 @@ const AdminDashboard = () => {
               </Table>
             </div>
           </TabsContent>
+
+          {/* Applications Tab */}
+          <TabsContent value="applications">
+            <TalentApplicationsTab applications={applications} onRefresh={refreshApplications} />
+          </TabsContent>
         </Tabs>
       </div>
       <Footer />
