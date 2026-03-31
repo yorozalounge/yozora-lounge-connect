@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 interface Props {
   children: React.ReactNode;
-  requiredRole?: "client" | "talent";
+  requiredRole?: "client" | "talent" | "admin";
 }
 
 const ProtectedRoute = ({ children, requiredRole }: Props) => {
