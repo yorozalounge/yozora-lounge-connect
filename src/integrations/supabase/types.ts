@@ -110,6 +110,69 @@ export type Database = {
         }
         Relationships: []
       }
+      talent_availability: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          end_hour: number
+          id: string
+          is_available: boolean
+          start_hour: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          end_hour: number
+          id?: string
+          is_available?: boolean
+          start_hour: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          end_hour?: number
+          id?: string
+          is_available?: boolean
+          start_hour?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      talent_payouts: {
+        Row: {
+          created_at: string
+          credits_amount: number
+          id: string
+          payout_date: string
+          status: string
+          usd_amount: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits_amount: number
+          id?: string
+          payout_date: string
+          status?: string
+          usd_amount: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits_amount?: number
+          id?: string
+          payout_date?: string
+          status?: string
+          usd_amount?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -155,6 +218,15 @@ export type Database = {
           _bonus: number
           _bundle_name: string
           _credits: number
+        }
+        Returns: undefined
+      }
+      upsert_availability: {
+        Args: {
+          _day_of_week: number
+          _end_hour: number
+          _is_available: boolean
+          _start_hour: number
         }
         Returns: undefined
       }
