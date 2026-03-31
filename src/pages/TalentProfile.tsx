@@ -122,9 +122,16 @@ const TalentProfile = () => {
             <p className="text-ivory text-sm leading-relaxed mb-2 opacity-80">
               Your {selectedDuration}-minute session with {talent.name} has been confirmed.
             </p>
-            <p className="text-gold text-sm mb-8">
+            <p className="text-gold text-sm mb-6">
               {getCreditsForDuration(selectedDuration!).toLocaleString()} credits deducted
             </p>
+
+            {bookedId && (
+              <div className="mb-8">
+                <TipPanel bookingId={bookedId} talentId={talent.id} talentName={talent.name} />
+              </div>
+            )}
+
             <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">Browse More Talents</Link>
           </div>
         </div>
