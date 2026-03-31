@@ -28,6 +28,7 @@ const TalentProfile = () => {
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [booking, setBooking] = useState(false);
   const [booked, setBooked] = useState(false);
+  const [bookedId, setBookedId] = useState<string | null>(null);
   const [unreviewedBooking, setUnreviewedBooking] = useState<UnreviewedBooking | null>(null);
   const [showReviewDialog, setShowReviewDialog] = useState(false);
   const [profileName, setProfileName] = useState("");
