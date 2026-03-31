@@ -20,6 +20,7 @@ import {
 interface Booking {
   id: string;
   client_name: string;
+  client_id: string;
   duration_minutes: number;
   credits_charged: number;
   status: string;
