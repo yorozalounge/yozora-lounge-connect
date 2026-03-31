@@ -159,6 +159,14 @@ const AdminDashboard = () => {
             <TabsTrigger value="bookings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs tracking-wider">Bookings</TabsTrigger>
             <TabsTrigger value="finances" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs tracking-wider">Finances</TabsTrigger>
             <TabsTrigger value="payouts" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs tracking-wider">Payouts</TabsTrigger>
+            <TabsTrigger value="applications" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs tracking-wider">
+              Applications
+              {applications.filter(a => a.status === "pending").length > 0 && (
+                <span className="ml-1.5 bg-destructive text-destructive-foreground text-[9px] px-1.5 py-0.5 rounded-full">
+                  {applications.filter(a => a.status === "pending").length}
+                </span>
+              )}
+            </TabsTrigger>
           </TabsList>
 
           {/* Users Tab */}
