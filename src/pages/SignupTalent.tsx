@@ -86,7 +86,6 @@ const SignupTalent = () => {
       </div>
     );
   }
-  };
 
   return (
     <div className="bg-yozora min-h-screen">
