@@ -58,7 +58,19 @@ const ClientDashboard = () => {
       .eq("client_id", user.id)
       .order("created_at", { ascending: false })
       .limit(50)
-      .then(({ data }) => setBookings((data as Booking[]) || []));
+      .then(({ data }) => {
+        setBookings((data as Booking[]) || []);
+        // Fetch which bookings already have reviews
+        if (data && data.length > 0) {
+          supabase
+            .from("session_reviews")
+            .select("booking_id")
+            .eq("reviewer_id", user.id)
+            .then(({ data: reviews }) => {
+              setReviewedBookings(new Set((reviews || []).map((r: any) => r.booking_id)));
+            });
+        }
+      });
   }, [user]);
 
   const now = new Date();
