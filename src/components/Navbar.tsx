@@ -21,8 +21,8 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
-        <Link to="/" className="font-heading text-gold tracking-[0.3em] text-lg uppercase">
-          Yozora Lounge
+        <Link to="/">
+          <img src={logo} alt="Yozora Lounge" className="h-8 w-auto" />
         </Link>
         <div className="hidden md:flex items-center gap-10">
           <Link to="/how-it-works" className="small-caps-ivory hover:text-gold transition-colors duration-300">
