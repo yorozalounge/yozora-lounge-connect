@@ -7,7 +7,8 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Users, CalendarCheck, CreditCard, Star } from "lucide-react";
+import { Users, CalendarCheck, CreditCard, Star, ClipboardList } from "lucide-react";
+import TalentApplicationsTab from "@/components/admin/TalentApplicationsTab";
 
 interface Profile {
   user_id: string;
