@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -11,6 +12,12 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  // If user is already signed in, redirect home
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,8 +29,7 @@ const Login = () => {
       toast({ title: "Error", description: error.message, variant: "destructive" });
       return;
     }
-
-    navigate("/");
+    // onAuthStateChange in AuthProvider will update user → useEffect above navigates
   };
 
   return (
