@@ -260,6 +260,22 @@ const ClientDashboard = () => {
             </div>
           )}
         </div>
+
+        {reviewTarget && user && (
+          <ReviewDialog
+            open={!!reviewTarget}
+            onOpenChange={(open) => !open && setReviewTarget(null)}
+            bookingId={reviewTarget.id}
+            talentName={reviewTarget.talent_name}
+            talentId={reviewTarget.talent_name.toLowerCase().replace(/\s+/g, "-")}
+            reviewerId={user.id}
+            reviewerName={profile?.full_name || "Client"}
+            onReviewSubmitted={() => {
+              setReviewedBookings((prev) => new Set([...prev, reviewTarget.id]));
+              setReviewTarget(null);
+            }}
+          />
+        )}
       </div>
       <Footer />
     </div>
