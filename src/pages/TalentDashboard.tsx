@@ -71,6 +71,8 @@ const TalentDashboard = () => {
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [savingAvailability, setSavingAvailability] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview" | "availability" | "profile" | "payouts">("overview");
+  const [ratedBookings, setRatedBookings] = useState<Set<string>>(new Set());
+  const [ratingTarget, setRatingTarget] = useState<Booking | null>(null);
 
   useEffect(() => {
     if (!user) return;
