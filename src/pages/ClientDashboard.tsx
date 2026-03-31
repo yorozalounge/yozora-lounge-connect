@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ReviewDialog from "@/components/ReviewDialog";
 import { CreditCard, Clock, LogOut, History, Star, Users, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 
