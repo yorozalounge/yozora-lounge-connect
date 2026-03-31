@@ -10,6 +10,7 @@ import TalentPricing from "@/components/talent-profile/TalentPricing";
 import TalentAvailability from "@/components/talent-profile/TalentAvailability";
 import TalentReviews from "@/components/talent-profile/TalentReviews";
 import ReviewSessionDialog from "@/components/talent-profile/ReviewSessionDialog";
+import TipPanel from "@/components/TipPanel";
 import { talents } from "@/data/talents";
 import { CheckCircle } from "lucide-react";
 
