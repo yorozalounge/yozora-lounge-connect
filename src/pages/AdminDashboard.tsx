@@ -7,7 +7,8 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Users, CalendarCheck, CreditCard, Star } from "lucide-react";
+import { Users, CalendarCheck, CreditCard, Star, ClipboardList } from "lucide-react";
+import TalentApplicationsTab from "@/components/admin/TalentApplicationsTab";
 
 interface Profile {
   user_id: string;
@@ -52,32 +53,54 @@ interface Payout {
   payout_date: string;
 }
 
+interface TalentApplication {
+  id: string;
+  user_id: string;
+  full_name: string;
+  email: string;
+  bio: string;
+  specialty: string;
+  portfolio_url: string;
+  status: string;
+  admin_notes: string;
+  created_at: string;
+  reviewed_at: string | null;
+}
+
 const AdminDashboard = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [roles, setRoles] = useState<UserRole[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
   const [payouts, setPayouts] = useState<Payout[]>([]);
+  const [applications, setApplications] = useState<TalentApplication[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAll = async () => {
-      const [profilesRes, rolesRes, bookingsRes, txRes, payoutsRes] = await Promise.all([
+      const [profilesRes, rolesRes, bookingsRes, txRes, payoutsRes, appsRes] = await Promise.all([
         supabase.from("profiles").select("*").order("created_at", { ascending: false }),
         supabase.from("user_roles").select("*"),
         supabase.from("bookings").select("*").order("created_at", { ascending: false }),
         supabase.from("credit_transactions").select("*").order("created_at", { ascending: false }),
         supabase.from("talent_payouts").select("*").order("payout_date", { ascending: false }),
+        supabase.from("talent_applications").select("*").order("created_at", { ascending: false }),
       ]);
       setProfiles(profilesRes.data ?? []);
       setRoles(rolesRes.data ?? []);
       setBookings(bookingsRes.data ?? []);
       setTransactions(txRes.data ?? []);
       setPayouts(payoutsRes.data ?? []);
+      setApplications((appsRes.data as unknown as TalentApplication[]) ?? []);
       setLoading(false);
     };
     fetchAll();
   }, []);
+
+  const refreshApplications = async () => {
+    const { data } = await supabase.from("talent_applications").select("*").order("created_at", { ascending: false });
+    setApplications((data as unknown as TalentApplication[]) ?? []);
+  };
 
   const getRoleForUser = (userId: string) => {
     const found = roles.find((r) => r.user_id === userId);
@@ -136,6 +159,14 @@ const AdminDashboard = () => {
             <TabsTrigger value="bookings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs tracking-wider">Bookings</TabsTrigger>
             <TabsTrigger value="finances" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs tracking-wider">Finances</TabsTrigger>
             <TabsTrigger value="payouts" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs tracking-wider">Payouts</TabsTrigger>
+            <TabsTrigger value="applications" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs tracking-wider">
+              Applications
+              {applications.filter(a => a.status === "pending").length > 0 && (
+                <span className="ml-1.5 bg-destructive text-destructive-foreground text-[9px] px-1.5 py-0.5 rounded-full">
+                  {applications.filter(a => a.status === "pending").length}
+                </span>
+              )}
+            </TabsTrigger>
           </TabsList>
 
           {/* Users Tab */}
@@ -270,6 +301,11 @@ const AdminDashboard = () => {
                 </TableBody>
               </Table>
             </div>
+          </TabsContent>
+
+          {/* Applications Tab */}
+          <TabsContent value="applications">
+            <TalentApplicationsTab applications={applications} onRefresh={refreshApplications} />
           </TabsContent>
         </Tabs>
       </div>
