@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
+import logo from "@/assets/logo.png";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ConstellationBg from "@/components/ConstellationBg";
