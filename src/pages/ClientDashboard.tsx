@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ReviewDialog from "@/components/ReviewDialog";
 import { CreditCard, Clock, LogOut, History, Star, Users, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -30,6 +31,8 @@ const ClientDashboard = () => {
   const [profile, setProfile] = useState<{ full_name: string; credit_balance: number } | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [reviewedBookings, setReviewedBookings] = useState<Set<string>>(new Set());
+  const [reviewTarget, setReviewTarget] = useState<Booking | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -55,7 +58,19 @@ const ClientDashboard = () => {
       .eq("client_id", user.id)
       .order("created_at", { ascending: false })
       .limit(50)
-      .then(({ data }) => setBookings((data as Booking[]) || []));
+      .then(({ data }) => {
+        setBookings((data as Booking[]) || []);
+        // Fetch which bookings already have reviews
+        if (data && data.length > 0) {
+          supabase
+            .from("session_reviews")
+            .select("booking_id")
+            .eq("reviewer_id", user.id)
+            .then(({ data: reviews }) => {
+              setReviewedBookings(new Set((reviews || []).map((r: any) => r.booking_id)));
+            });
+        }
+      });
   }, [user]);
 
   const now = new Date();
@@ -218,12 +233,15 @@ const ClientDashboard = () => {
                       <td className="text-ivory-muted py-3 pr-4">{b.duration_minutes} min</td>
                       <td className="text-gold py-3 pr-4 font-heading">{b.credits_charged.toLocaleString()}</td>
                       <td className="py-3 pr-4">
-                        {b.status === "completed" ? (
-                          <div className="flex gap-0.5">
-                            {[1, 2, 3, 4, 5].map((s) => (
-                              <Star key={s} size={12} className="text-gold fill-gold" />
-                            ))}
-                          </div>
+                        {reviewedBookings.has(b.id) ? (
+                          <span className="text-ivory-muted text-xs">Reviewed</span>
+                        ) : b.status === "confirmed" ? (
+                          <button
+                            onClick={() => setReviewTarget(b)}
+                            className="text-gold text-xs underline underline-offset-2 hover:opacity-80"
+                          >
+                            Leave Review
+                          </button>
                         ) : (
                           <span className="text-ivory-muted text-xs">—</span>
                         )}
@@ -242,6 +260,22 @@ const ClientDashboard = () => {
             </div>
           )}
         </div>
+
+        {reviewTarget && user && (
+          <ReviewDialog
+            open={!!reviewTarget}
+            onOpenChange={(open) => !open && setReviewTarget(null)}
+            bookingId={reviewTarget.id}
+            talentName={reviewTarget.talent_name}
+            talentId={reviewTarget.talent_name.toLowerCase().replace(/\s+/g, "-")}
+            reviewerId={user.id}
+            reviewerName={profile?.full_name || "Client"}
+            onReviewSubmitted={() => {
+              setReviewedBookings((prev) => new Set([...prev, reviewTarget.id]));
+              setReviewTarget(null);
+            }}
+          />
+        )}
       </div>
       <Footer />
     </div>

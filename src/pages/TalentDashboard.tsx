@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
+import TalentRatingDialog from "@/components/TalentRatingDialog";
 import {
   DollarSign,
   Calendar,
@@ -19,6 +20,7 @@ import {
 interface Booking {
   id: string;
   client_name: string;
+  client_id: string;
   duration_minutes: number;
   credits_charged: number;
   status: string;
@@ -69,6 +71,8 @@ const TalentDashboard = () => {
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [savingAvailability, setSavingAvailability] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview" | "availability" | "profile" | "payouts">("overview");
+  const [ratedBookings, setRatedBookings] = useState<Set<string>>(new Set());
+  const [ratingTarget, setRatingTarget] = useState<Booking | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -91,6 +95,14 @@ const TalentDashboard = () => {
               const b = (bd as Booking[]) || [];
               setBookings(b);
               setTotalEarnings(b.reduce((s, bk) => s + bk.credits_charged, 0));
+            });
+          // Fetch which bookings talent already rated
+          supabase
+            .from("talent_session_ratings")
+            .select("booking_id")
+            .eq("talent_user_id", user.id)
+            .then(({ data: ratings }) => {
+              setRatedBookings(new Set((ratings || []).map((r: any) => r.booking_id)));
             });
         }
       });
@@ -320,11 +332,24 @@ const TalentDashboard = () => {
                           })}
                         </p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-gold text-sm font-heading">
-                          +{b.credits_charged.toLocaleString()}
-                        </p>
-                        <p className="text-ivory-muted text-xs capitalize">{b.status}</p>
+                      <div className="text-right flex items-center gap-3">
+                        <div>
+                          <p className="text-gold text-sm font-heading">
+                            +{b.credits_charged.toLocaleString()}
+                          </p>
+                          <p className="text-ivory-muted text-xs capitalize">{b.status}</p>
+                        </div>
+                        {b.status === "confirmed" && !ratedBookings.has(b.id) && (
+                          <button
+                            onClick={() => setRatingTarget(b)}
+                            className="text-gold text-xs underline underline-offset-2 hover:opacity-80"
+                          >
+                            Rate
+                          </button>
+                        )}
+                        {ratedBookings.has(b.id) && (
+                          <span className="text-ivory-muted text-xs">Rated</span>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -557,6 +582,22 @@ const TalentDashboard = () => {
           </div>
         )}
       </div>
+
+      {ratingTarget && user && (
+        <TalentRatingDialog
+          open={!!ratingTarget}
+          onOpenChange={(open) => !open && setRatingTarget(null)}
+          bookingId={ratingTarget.id}
+          clientName={ratingTarget.client_name || "Client"}
+          clientId={ratingTarget.client_id}
+          talentUserId={user.id}
+          onRatingSubmitted={() => {
+            setRatedBookings((prev) => new Set([...prev, ratingTarget.id]));
+            setRatingTarget(null);
+          }}
+        />
+      )}
+
       <Footer />
     </div>
   );
