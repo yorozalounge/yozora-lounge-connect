@@ -36,16 +36,6 @@ const Login = () => {
     <div className="bg-yozora min-h-screen">
       <Navbar />
       <div className="pt-40 pb-20 px-6 max-w-md mx-auto">
-        <button
-          onClick={async () => {
-            await supabase.auth.signOut({ scope: 'local' });
-            localStorage.clear();
-            window.location.reload();
-          }}
-          className="text-ivory-muted text-xs underline mb-8 block mx-auto"
-        >
-          Clear stored session
-        </button>
         <h1 className="font-heading text-gold tracking-[0.2em] text-3xl text-center mb-2">
           Welcome Back
         </h1>
