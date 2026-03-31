@@ -43,6 +43,7 @@ const App = () => (
           <Route path="/signup/client" element={<SignupClient />} />
           <Route path="/signup/talent" element={<SignupTalent />} />
           <Route path="/talent/:id" element={<TalentProfile />} />
+          <Route path="/my-sessions" element={<MySessions />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
