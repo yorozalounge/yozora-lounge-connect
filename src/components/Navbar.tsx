@@ -57,8 +57,8 @@ const Navbar = () => {
               <Link to="/login" className="small-caps-ivory hover:text-gold transition-colors duration-300">
                 Sign In
               </Link>
-              <Link to="/signup/client" className="btn-gold-outline text-xs py-2 px-6">
-                Join
+              <Link to="/signup/talent" className="btn-gold-outline text-xs py-2 px-6">
+                Join as Talent
               </Link>
             </>
           )}

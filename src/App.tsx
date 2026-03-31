@@ -8,7 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index.tsx";
 import TalentsPage from "./pages/Talents.tsx";
 import HowItWorksPage from "./pages/HowItWorks.tsx";
-import JoinPage from "./pages/Join.tsx";
+
 import CreditsPage from "./pages/Credits.tsx";
 import ContactPage from "./pages/Contact.tsx";
 import Login from "./pages/Login.tsx";
@@ -31,7 +31,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/talents" element={<TalentsPage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
-            <Route path="/join" element={<JoinPage />} />
+            <Route path="/join" element={<SignupTalent />} />
             <Route path="/credits" element={<CreditsPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<Login />} />
