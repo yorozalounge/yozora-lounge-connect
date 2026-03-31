@@ -19,7 +19,8 @@ const ProtectedRoute = ({ children, requiredRole }: Props) => {
 
   if (!user) return <Navigate to="/login" replace />;
   if (requiredRole && role !== requiredRole) {
-    return <Navigate to={role === "talent" ? "/talent-dashboard" : "/client-dashboard"} replace />;
+    const dest = role === "admin" ? "/admin" : role === "talent" ? "/talent-dashboard" : "/client-dashboard";
+    return <Navigate to={dest} replace />;
   }
 
   return <>{children}</>;
