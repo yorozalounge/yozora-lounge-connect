@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReviewSessionDialog from "@/components/talent-profile/ReviewSessionDialog";
+import TipPanel from "@/components/TipPanel";
 import RateClientDialog from "@/components/RateClientDialog";
 
 interface Booking {
