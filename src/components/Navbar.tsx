@@ -41,9 +41,14 @@ const Navbar = () => {
             Contact
           </Link>
           {user ? (
-            <button onClick={signOut} className="btn-gold-outline text-xs py-2 px-6">
-              Sign Out
-            </button>
+            <>
+              <Link to="/my-sessions" className="small-caps-ivory hover:text-gold transition-colors duration-300">
+                My Sessions
+              </Link>
+              <button onClick={signOut} className="btn-gold-outline text-xs py-2 px-6">
+                Sign Out
+              </button>
+            </>
           ) : (
             <>
               <Link to="/login" className="small-caps-ivory hover:text-gold transition-colors duration-300">
