@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      credit_transactions: {
+        Row: {
+          amount_paid: number
+          bonus_credits: number
+          bundle_name: string
+          created_at: string
+          credits_purchased: number
+          id: string
+          user_id: string
+        }
+        Insert: {
+          amount_paid: number
+          bonus_credits?: number
+          bundle_name: string
+          created_at?: string
+          credits_purchased: number
+          id?: string
+          user_id: string
+        }
+        Update: {
+          amount_paid?: number
+          bonus_credits?: number
+          bundle_name?: string
+          created_at?: string
+          credits_purchased?: number
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -73,6 +103,15 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      purchase_credits: {
+        Args: {
+          _amount: number
+          _bonus: number
+          _bundle_name: string
+          _credits: number
+        }
+        Returns: undefined
       }
     }
     Enums: {
