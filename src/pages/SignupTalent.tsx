@@ -23,8 +23,8 @@ const SignupTalent = () => {
   const [password, setPassword] = useState("");
   const [motivation, setMotivation] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleSignup = async (e: React.FormEvent) => {
