@@ -8,7 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index.tsx";
 import TalentsPage from "./pages/Talents.tsx";
 import HowItWorksPage from "./pages/HowItWorks.tsx";
-import JoinPage from "./pages/Join.tsx";
+
 import CreditsPage from "./pages/Credits.tsx";
 import ContactPage from "./pages/Contact.tsx";
 import Login from "./pages/Login.tsx";
