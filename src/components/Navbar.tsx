@@ -21,9 +21,9 @@ const Navbar = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-28">
         <Link to="/">
-          <img src={logo} alt="Yozora Lounge" className="h-8 w-auto" />
+          <img src={logo} alt="Yozora Lounge" className="h-[100px] w-auto" />
         </Link>
         <div className="hidden md:flex items-center gap-10">
           <Link to="/how-it-works" className="small-caps-ivory hover:text-gold transition-colors duration-300">
