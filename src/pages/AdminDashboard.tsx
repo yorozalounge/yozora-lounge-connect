@@ -53,6 +53,20 @@ interface Payout {
   payout_date: string;
 }
 
+interface TalentApplication {
+  id: string;
+  user_id: string;
+  full_name: string;
+  email: string;
+  bio: string;
+  specialty: string;
+  portfolio_url: string;
+  status: string;
+  admin_notes: string;
+  created_at: string;
+  reviewed_at: string | null;
+}
+
 const AdminDashboard = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [roles, setRoles] = useState<UserRole[]>([]);
