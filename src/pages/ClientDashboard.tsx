@@ -31,6 +31,8 @@ const ClientDashboard = () => {
   const [profile, setProfile] = useState<{ full_name: string; credit_balance: number } | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [reviewedBookings, setReviewedBookings] = useState<Set<string>>(new Set());
+  const [reviewTarget, setReviewTarget] = useState<Booking | null>(null);
 
   useEffect(() => {
     if (!user) return;
