@@ -432,6 +432,47 @@ export type Database = {
           },
         ]
       }
+      tips: {
+        Row: {
+          amount: number
+          booking_id: string
+          client_id: string
+          created_at: string
+          id: string
+          platform_share: number
+          talent_id: string
+          talent_share: number
+        }
+        Insert: {
+          amount: number
+          booking_id: string
+          client_id: string
+          created_at?: string
+          id?: string
+          platform_share: number
+          talent_id: string
+          talent_share: number
+        }
+        Update: {
+          amount?: number
+          booking_id?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+          platform_share?: number
+          talent_id?: string
+          talent_share?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tips_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -512,6 +553,10 @@ export type Database = {
       reject_talent_application: {
         Args: { _application_id: string; _notes?: string }
         Returns: undefined
+      }
+      send_tip: {
+        Args: { _amount: number; _booking_id: string; _talent_id: string }
+        Returns: string
       }
       upsert_availability: {
         Args: {
