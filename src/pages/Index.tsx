@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
+import logo from "@/assets/logo.png";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ConstellationBg from "@/components/ConstellationBg";
@@ -26,12 +27,7 @@ const Index = () => (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <ConstellationBg />
       <div className="relative z-10 text-center px-6 max-w-5xl">
-        <h1 className="font-heading text-gold tracking-[0.2em] text-[12vw] md:text-[10vw] lg:text-[8vw] leading-[0.9] mb-2">
-          YOZORA
-        </h1>
-        <h1 className="font-heading text-gold tracking-[0.2em] text-[12vw] md:text-[10vw] lg:text-[8vw] leading-[0.9] mb-8">
-          LOUNGE
-        </h1>
+        <img src={logo} alt="Yozora Lounge" className="w-[80vw] md:w-[65vw] lg:w-[50vw] h-auto mb-8 mx-auto" />
         <p className="font-heading italic text-ivory text-xl md:text-2xl mb-6 opacity-80">
           Where the Night Begins
         </p>
