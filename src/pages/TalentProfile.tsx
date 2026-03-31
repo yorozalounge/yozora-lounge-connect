@@ -5,14 +5,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import TalentHero from "@/components/talent-profile/TalentHero";
+import TalentPricing from "@/components/talent-profile/TalentPricing";
+import TalentAvailability from "@/components/talent-profile/TalentAvailability";
+import TalentReviews from "@/components/talent-profile/TalentReviews";
 import { talents } from "@/data/talents";
-import { Star, Clock, CheckCircle } from "lucide-react";
-
-const sessionOptions = [
-  { duration: 20, label: "20 minutes", multiplier: 1 },
-  { duration: 40, label: "40 minutes", multiplier: 2 },
-  { duration: 60, label: "60 minutes", multiplier: 3 },
-];
+import { CheckCircle } from "lucide-react";
 
 const TalentProfile = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,25 +29,18 @@ const TalentProfile = () => {
         <Navbar />
         <div className="pt-40 pb-20 px-6 text-center">
           <h1 className="font-heading text-gold text-3xl mb-4">Talent Not Found</h1>
-          <Link to="/talents" className="btn-gold-outline text-xs py-2 px-6">
-            Back to Talents
-          </Link>
+          <Link to="/talents" className="btn-gold-outline text-xs py-2 px-6">Back to Talents</Link>
         </div>
         <Footer />
       </div>
     );
   }
 
-  const getCreditsForDuration = (duration: number) => {
-    const option = sessionOptions.find((o) => o.duration === duration);
-    return option ? talent.credits * option.multiplier : 0;
-  };
+  const getCreditsForDuration = (duration: number) =>
+    talent.pricing.find((p) => p.duration === duration)?.credits ?? 0;
 
   const handleBook = async () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
+    if (!user) { navigate("/login"); return; }
     if (role !== "client") {
       toast({ title: "Clients only", description: "Only clients can book sessions.", variant: "destructive" });
       return;
@@ -89,9 +80,7 @@ const TalentProfile = () => {
         <div className="pt-40 pb-20 px-6 max-w-md mx-auto text-center">
           <div className="bg-card-dark border border-gold-subtle p-12">
             <CheckCircle size={48} className="text-gold mx-auto mb-6" />
-            <h1 className="font-heading text-gold tracking-[0.2em] text-2xl mb-4">
-              Session Booked
-            </h1>
+            <h1 className="font-heading text-gold tracking-[0.2em] text-2xl mb-4">Session Booked</h1>
             <p className="text-ivory text-sm leading-relaxed mb-2 opacity-80">
               Your {selectedDuration}-minute session with {talent.name} has been confirmed.
             </p>
@@ -99,12 +88,8 @@ const TalentProfile = () => {
               {getCreditsForDuration(selectedDuration!).toLocaleString()} credits deducted
             </p>
             <div className="flex flex-col gap-3">
-              <Link to="/client-dashboard" className="btn-gold-solid text-xs py-2 px-8">
-                View Dashboard
-              </Link>
-              <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">
-                Browse More Talents
-              </Link>
+              <Link to="/client-dashboard" className="btn-gold-solid text-xs py-2 px-8">View Dashboard</Link>
+              <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">Browse More Talents</Link>
             </div>
           </div>
         </div>
@@ -116,95 +101,44 @@ const TalentProfile = () => {
   return (
     <div className="bg-yozora min-h-screen">
       <Navbar />
-      <section className="pt-32 pb-20 px-6 lg:px-12 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Photo */}
-          <div className="aspect-[3/4] overflow-hidden border border-gold-subtle">
-            <img
-              src={talent.image}
-              alt={talent.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
 
-          {/* Details & Booking */}
-          <div className="flex flex-col justify-center">
-            <div className="mb-2">
-              {talent.online && (
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                  <span className="small-caps-gold text-[10px]">Online Now</span>
-                </div>
-              )}
-              <h1 className="font-heading text-gold tracking-[0.2em] text-3xl md:text-4xl mb-2">
-                {talent.name}
-              </h1>
-              <p className="small-caps-ivory text-[10px] opacity-60 mb-4">
-                {talent.flag} {talent.country}
-              </p>
-              <p className="text-ivory text-sm opacity-70 mb-4">
-                {talent.languages.join(" · ")}
-              </p>
-              <div className="flex items-center gap-2 mb-6">
-                <div className="flex">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={14}
-                      className={i < Math.floor(talent.rating) ? "fill-primary text-primary" : "text-primary/30"}
-                    />
-                  ))}
-                </div>
-                <span className="text-ivory text-sm opacity-60">{talent.rating}</span>
-                <span className="text-ivory-muted text-sm">· {talent.sessions} sessions</span>
-              </div>
-            </div>
+      <section className="pt-32 pb-16 px-6 lg:px-12 max-w-6xl mx-auto">
+        <TalentHero talent={talent} />
+      </section>
 
-            {/* Session Selection */}
-            <div className="border border-gold-subtle p-6 mb-6">
-              <h2 className="font-heading text-gold tracking-[0.15em] text-lg mb-6">
-                Book a Session
-              </h2>
-              <div className="space-y-3">
-                {sessionOptions.map((opt) => {
-                  const credits = getCreditsForDuration(opt.duration);
-                  return (
-                    <button
-                      key={opt.duration}
-                      onClick={() => setSelectedDuration(opt.duration)}
-                      className={`w-full flex items-center justify-between p-4 border transition-all duration-200 ${
-                        selectedDuration === opt.duration
-                          ? "border-primary bg-primary/10"
-                          : "border-gold-subtle hover:border-primary/40"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Clock size={16} className="text-gold" />
-                        <span className="text-ivory text-sm">{opt.label}</span>
-                      </div>
-                      <span className="font-heading text-gold text-sm">
-                        {credits.toLocaleString()} credits
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <button
-              onClick={handleBook}
-              disabled={!selectedDuration || booking}
-              className="btn-gold-solid w-full disabled:opacity-40"
-            >
-              {booking
-                ? "Booking..."
-                : selectedDuration
-                ? `Confirm Booking — ${getCreditsForDuration(selectedDuration).toLocaleString()} credits`
-                : "Select a Session Length"}
-            </button>
-          </div>
+      <section className="pb-16 px-6 lg:px-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <TalentPricing
+            talent={talent}
+            selectedDuration={selectedDuration}
+            onSelect={setSelectedDuration}
+          />
+          <TalentAvailability />
         </div>
       </section>
+
+      <section className="pb-16 px-6 lg:px-12 max-w-6xl mx-auto">
+        <TalentReviews talent={talent} />
+      </section>
+
+      {/* Sticky booking bar */}
+      <div className="sticky bottom-0 bg-card-dark border-t border-gold-subtle py-4 px-6 z-40">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="text-ivory text-sm opacity-70">
+            {selectedDuration
+              ? `${selectedDuration} min — ${getCreditsForDuration(selectedDuration).toLocaleString()} credits`
+              : "Select a session length above"}
+          </div>
+          <button
+            onClick={handleBook}
+            disabled={!selectedDuration || booking}
+            className="btn-gold-solid text-xs disabled:opacity-40"
+          >
+            {booking ? "Booking..." : "Book Session"}
+          </button>
+        </div>
+      </div>
+
       <Footer />
     </div>
   );
