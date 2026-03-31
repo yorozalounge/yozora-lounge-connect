@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const { user, role, signOut } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -38,9 +40,28 @@ const Navbar = () => {
           <Link to="/contact" className="small-caps-ivory hover:text-gold transition-colors duration-300">
             Contact
           </Link>
-          <Link to="/join" className="btn-gold-outline text-xs py-2 px-6">
-            Join as Talent
-          </Link>
+          {user ? (
+            <>
+              <Link
+                to={role === "talent" ? "/talent-dashboard" : "/client-dashboard"}
+                className="small-caps-ivory hover:text-gold transition-colors duration-300"
+              >
+                Dashboard
+              </Link>
+              <button onClick={signOut} className="btn-gold-outline text-xs py-2 px-6">
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="small-caps-ivory hover:text-gold transition-colors duration-300">
+                Sign In
+              </Link>
+              <Link to="/signup/client" className="btn-gold-outline text-xs py-2 px-6">
+                Join
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
