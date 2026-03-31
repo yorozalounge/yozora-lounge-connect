@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,28 +12,26 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, role, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && user && role) {
+      navigate(role === "admin" ? "/admin" : role === "talent" ? "/talent-dashboard" : "/client-dashboard", {
+        replace: true,
+      });
+    }
+  }, [authLoading, navigate, role, user]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+
     setLoading(false);
 
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
-      return;
-    }
-
-    // Fetch role to redirect
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .single();
-      const r = roleData?.role;
-      navigate(r === "admin" ? "/admin" : r === "talent" ? "/talent-dashboard" : "/client-dashboard");
     }
   };
 
@@ -69,8 +67,8 @@ const Login = () => {
               className="w-full bg-secondary border border-gold-subtle px-4 py-3 text-ivory text-sm font-body focus:outline-none focus:border-primary transition-colors"
             />
           </div>
-          <button type="submit" disabled={loading} className="btn-gold-solid w-full">
-            {loading ? "Signing in..." : "Sign In"}
+          <button type="submit" disabled={loading || authLoading} className="btn-gold-solid w-full">
+            {loading || authLoading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
