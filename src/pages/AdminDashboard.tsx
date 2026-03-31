@@ -78,22 +78,29 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const fetchAll = async () => {
-      const [profilesRes, rolesRes, bookingsRes, txRes, payoutsRes] = await Promise.all([
+      const [profilesRes, rolesRes, bookingsRes, txRes, payoutsRes, appsRes] = await Promise.all([
         supabase.from("profiles").select("*").order("created_at", { ascending: false }),
         supabase.from("user_roles").select("*"),
         supabase.from("bookings").select("*").order("created_at", { ascending: false }),
         supabase.from("credit_transactions").select("*").order("created_at", { ascending: false }),
         supabase.from("talent_payouts").select("*").order("payout_date", { ascending: false }),
+        supabase.from("talent_applications").select("*").order("created_at", { ascending: false }),
       ]);
       setProfiles(profilesRes.data ?? []);
       setRoles(rolesRes.data ?? []);
       setBookings(bookingsRes.data ?? []);
       setTransactions(txRes.data ?? []);
       setPayouts(payoutsRes.data ?? []);
+      setApplications((appsRes.data as unknown as TalentApplication[]) ?? []);
       setLoading(false);
     };
     fetchAll();
   }, []);
+
+  const refreshApplications = async () => {
+    const { data } = await supabase.from("talent_applications").select("*").order("created_at", { ascending: false });
+    setApplications((data as unknown as TalentApplication[]) ?? []);
+  };
 
   const getRoleForUser = (userId: string) => {
     const found = roles.find((r) => r.user_id === userId);
