@@ -43,7 +43,7 @@ const Navbar = () => {
           {user ? (
             <>
               <Link
-                to={role === "talent" ? "/talent-dashboard" : "/client-dashboard"}
+                to={role === "admin" ? "/admin" : role === "talent" ? "/talent-dashboard" : "/client-dashboard"}
                 className="small-caps-ivory hover:text-gold transition-colors duration-300"
               >
                 Dashboard

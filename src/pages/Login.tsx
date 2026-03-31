@@ -32,7 +32,8 @@ const Login = () => {
         .select("role")
         .eq("user_id", user.id)
         .single();
-      navigate(roleData?.role === "talent" ? "/talent-dashboard" : "/client-dashboard");
+      const r = roleData?.role;
+      navigate(r === "admin" ? "/admin" : r === "talent" ? "/talent-dashboard" : "/client-dashboard");
     }
   };
 
