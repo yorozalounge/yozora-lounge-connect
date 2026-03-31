@@ -8,12 +8,12 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index.tsx";
 import TalentsPage from "./pages/Talents.tsx";
 import HowItWorksPage from "./pages/HowItWorks.tsx";
-
 import CreditsPage from "./pages/Credits.tsx";
 import ContactPage from "./pages/Contact.tsx";
 import Login from "./pages/Login.tsx";
 import SignupClient from "./pages/SignupClient.tsx";
 import SignupTalent from "./pages/SignupTalent.tsx";
+import TalentProfile from "./pages/TalentProfile.tsx";
 import ClientDashboard from "./pages/ClientDashboard.tsx";
 import TalentDashboard from "./pages/TalentDashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
