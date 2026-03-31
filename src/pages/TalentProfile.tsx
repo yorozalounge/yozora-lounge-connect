@@ -14,7 +14,7 @@ import { CheckCircle } from "lucide-react";
 
 const TalentProfile = () => {
   const { id } = useParams<{ id: string }>();
-  const { user, role } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
@@ -41,10 +41,6 @@ const TalentProfile = () => {
 
   const handleBook = async () => {
     if (!user) { navigate("/login"); return; }
-    if (role !== "client") {
-      toast({ title: "Clients only", description: "Only clients can book sessions.", variant: "destructive" });
-      return;
-    }
     if (!selectedDuration) return;
 
     const credits = getCreditsForDuration(selectedDuration);
@@ -87,10 +83,7 @@ const TalentProfile = () => {
             <p className="text-gold text-sm mb-8">
               {getCreditsForDuration(selectedDuration!).toLocaleString()} credits deducted
             </p>
-            <div className="flex flex-col gap-3">
-              <Link to="/client-dashboard" className="btn-gold-solid text-xs py-2 px-8">View Dashboard</Link>
-              <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">Browse More Talents</Link>
-            </div>
+            <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">Browse More Talents</Link>
           </div>
         </div>
         <Footer />

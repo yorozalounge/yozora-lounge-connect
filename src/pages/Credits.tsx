@@ -32,7 +32,7 @@ const gifts = [
 ];
 
 const CreditsPage = () => {
-  const { user, role } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [balance, setBalance] = useState<number | null>(null);
@@ -51,10 +51,6 @@ const CreditsPage = () => {
   const handlePurchase = async (bundle: typeof bundles[0]) => {
     if (!user) {
       navigate("/login");
-      return;
-    }
-    if (role !== "client") {
-      toast({ title: "Clients only", description: "Only clients can purchase credits.", variant: "destructive" });
       return;
     }
 
@@ -91,7 +87,7 @@ const CreditsPage = () => {
         </div>
 
         {/* Wallet Balance */}
-        {user && role === "client" && balance !== null && (
+        {user && balance !== null && (
           <div className="flex items-center justify-center gap-3 mb-12 bg-card-dark border border-gold-subtle px-8 py-4 mx-auto w-fit">
             <Wallet size={20} className="text-gold" />
             <span className="small-caps-gold text-sm">Your Balance:</span>

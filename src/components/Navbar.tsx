@@ -7,22 +7,13 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
-  const { user, role, loading, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const dashboardPath =
-    role === "admin"
-      ? "/admin"
-      : role === "talent"
-        ? "/talent-dashboard"
-        : role === "client"
-          ? "/client-dashboard"
-          : null;
 
   return (
     <nav
@@ -50,18 +41,9 @@ const Navbar = () => {
             Contact
           </Link>
           {user ? (
-            <>
-              {dashboardPath && !loading ? (
-                <Link to={dashboardPath} className="small-caps-ivory hover:text-gold transition-colors duration-300">
-                  Dashboard
-                </Link>
-              ) : (
-                <span className="small-caps-ivory opacity-50">Dashboard</span>
-              )}
-              <button onClick={signOut} className="btn-gold-outline text-xs py-2 px-6">
-                Sign Out
-              </button>
-            </>
+            <button onClick={signOut} className="btn-gold-outline text-xs py-2 px-6">
+              Sign Out
+            </button>
           ) : (
             <>
               <Link to="/login" className="small-caps-ivory hover:text-gold transition-colors duration-300">
