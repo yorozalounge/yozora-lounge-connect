@@ -110,7 +110,7 @@ const SignupTalent = () => {
     await supabase.functions.invoke("send-transactional-email", {
       body: {
         templateName: "new-talent-application",
-        recipientEmail: "admin@yozoralounge.com",
+        recipientEmail: "yozoralounge@outlook.com",
         idempotencyKey: `new-talent-app-${userId}`,
         templateData: {
           applicantName: fullName,
