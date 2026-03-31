@@ -72,6 +72,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
