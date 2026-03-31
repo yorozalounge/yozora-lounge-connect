@@ -582,6 +582,22 @@ const TalentDashboard = () => {
           </div>
         )}
       </div>
+
+      {ratingTarget && user && (
+        <TalentRatingDialog
+          open={!!ratingTarget}
+          onOpenChange={(open) => !open && setRatingTarget(null)}
+          bookingId={ratingTarget.id}
+          clientName={ratingTarget.client_name || "Client"}
+          clientId={ratingTarget.client_id}
+          talentUserId={user.id}
+          onRatingSubmitted={() => {
+            setRatedBookings((prev) => new Set([...prev, ratingTarget.id]));
+            setRatingTarget(null);
+          }}
+        />
+      )}
+
       <Footer />
     </div>
   );
