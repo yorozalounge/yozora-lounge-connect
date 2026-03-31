@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 
@@ -26,13 +27,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchRole = async (userId: string) => {
+  const fetchRole = async (userId: string): Promise<UserRole | null> => {
     const { data } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", userId)
       .single();
-    setRole((data?.role as UserRole) ?? null);
+    const r = (data?.role as UserRole) ?? null;
+    setRole(r);
+    return r;
   };
 
   useEffect(() => {

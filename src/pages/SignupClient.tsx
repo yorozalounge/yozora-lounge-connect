@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
+import { Mail } from "lucide-react";
 
 const SignupClient = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [submitted, setSubmitted] = useState(false);
   const { toast } = useToast();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -21,7 +22,7 @@ const SignupClient = () => {
       password,
       options: {
         data: { full_name: fullName, role: "client" },
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: `${window.location.origin}/client-dashboard`,
       },
     });
     setLoading(false);
@@ -31,12 +32,35 @@ const SignupClient = () => {
       return;
     }
 
-    toast({
-      title: "Check your email",
-      description: "We've sent you a verification link. Please confirm your email to sign in.",
-    });
-    navigate("/login");
+    setSubmitted(true);
   };
+
+  if (submitted) {
+    return (
+      <div className="bg-yozora min-h-screen">
+        <Navbar />
+        <div className="pt-40 pb-20 px-6 max-w-md mx-auto text-center">
+          <div className="bg-card-dark border border-gold-subtle p-12">
+            <Mail size={48} className="text-gold mx-auto mb-6" />
+            <h1 className="font-heading text-gold tracking-[0.2em] text-2xl mb-4">
+              Check Your Email
+            </h1>
+            <p className="text-ivory text-sm leading-relaxed mb-6 opacity-80">
+              Please check your email to verify your account before signing in.
+            </p>
+            <p className="text-ivory-muted text-xs mb-8 opacity-60">
+              We sent a verification link to <span className="text-gold">{email}</span>. 
+              Click the link in the email to activate your account.
+            </p>
+            <Link to="/login" className="btn-gold-outline text-xs py-2 px-8 inline-block">
+              Go to Sign In
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-yozora min-h-screen">
