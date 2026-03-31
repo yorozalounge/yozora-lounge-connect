@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,8 +9,15 @@ import TalentHero from "@/components/talent-profile/TalentHero";
 import TalentPricing from "@/components/talent-profile/TalentPricing";
 import TalentAvailability from "@/components/talent-profile/TalentAvailability";
 import TalentReviews from "@/components/talent-profile/TalentReviews";
+import ReviewSessionDialog from "@/components/talent-profile/ReviewSessionDialog";
 import { talents } from "@/data/talents";
 import { CheckCircle } from "lucide-react";
+
+interface UnreviewedBooking {
+  id: string;
+  talent_id: string;
+  talent_name: string;
+}
 
 const TalentProfile = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +27,38 @@ const TalentProfile = () => {
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [booking, setBooking] = useState(false);
   const [booked, setBooked] = useState(false);
+  const [unreviewedBooking, setUnreviewedBooking] = useState<UnreviewedBooking | null>(null);
+  const [showReviewDialog, setShowReviewDialog] = useState(false);
+  const [profileName, setProfileName] = useState("");
+  const [reviewsKey, setReviewsKey] = useState(0);
+
+  // Check if user has an unreviewed booking with this talent
+  useEffect(() => {
+    if (!user || !id) return;
+    const check = async () => {
+      const { data: profile } = await supabase.from("profiles").select("full_name").eq("user_id", user.id).single();
+      setProfileName(profile?.full_name || "");
+
+      const { data: bookings } = await supabase
+        .from("bookings")
+        .select("id, talent_id, talent_name")
+        .eq("client_id", user.id)
+        .eq("talent_id", id);
+
+      if (!bookings || bookings.length === 0) return;
+
+      const { data: reviews } = await supabase
+        .from("session_reviews")
+        .select("booking_id")
+        .eq("reviewer_id", user.id)
+        .eq("talent_id", id);
+
+      const reviewedIds = new Set((reviews || []).map((r) => r.booking_id));
+      const unreviewed = bookings.find((b) => !reviewedIds.has(b.id));
+      setUnreviewedBooking(unreviewed || null);
+    };
+    check();
+  }, [user, id, reviewsKey]);
 
   const talent = talents.find((t) => t.id === id);
 
