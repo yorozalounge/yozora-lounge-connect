@@ -15,13 +15,24 @@ interface Transaction {
   created_at: string;
 }
 
+interface Booking {
+  id: string;
+  talent_name: string;
+  duration_minutes: number;
+  credits_charged: number;
+  status: string;
+  created_at: string;
+}
+
 const ClientDashboard = () => {
   const { user, signOut } = useAuth();
   const [profile, setProfile] = useState<{ full_name: string; credit_balance: number } | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
     if (!user) return;
+
     supabase
       .from("profiles")
       .select("full_name, credit_balance")
@@ -36,6 +47,14 @@ const ClientDashboard = () => {
       .order("created_at", { ascending: false })
       .limit(10)
       .then(({ data }) => setTransactions((data as Transaction[]) || []));
+
+    supabase
+      .from("bookings")
+      .select("*")
+      .eq("client_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20)
+      .then(({ data }) => setBookings((data as Booking[]) || []));
   }, [user]);
 
   return (
@@ -76,14 +95,37 @@ const ClientDashboard = () => {
               <Clock size={20} className="text-gold" />
               <h2 className="small-caps-gold text-sm">Session History</h2>
             </div>
-            <div className="space-y-4">
-              <p className="text-ivory-muted text-sm italic">
-                No sessions yet. Browse our talents and book your first session.
-              </p>
-              <Link to="/talents" className="btn-gold-outline text-xs py-2 px-6 inline-block">
-                Browse Talents
-              </Link>
-            </div>
+            {bookings.length === 0 ? (
+              <div className="space-y-4">
+                <p className="text-ivory-muted text-sm italic">
+                  No sessions yet. Browse our talents and book your first session.
+                </p>
+                <Link to="/talents" className="btn-gold-outline text-xs py-2 px-6 inline-block">
+                  Browse Talents
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-3 max-h-64 overflow-y-auto">
+                {bookings.map((b) => (
+                  <div key={b.id} className="flex items-center justify-between border-b border-gold-subtle pb-3 last:border-0">
+                    <div>
+                      <p className="text-ivory text-sm">{b.talent_name}</p>
+                      <p className="text-ivory-muted text-xs">
+                        {b.duration_minutes} min · {new Date(b.created_at).toLocaleDateString("en-US", {
+                          month: "short", day: "numeric", year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-gold text-sm font-heading">
+                        {b.credits_charged.toLocaleString()}
+                      </p>
+                      <p className="text-ivory-muted text-xs capitalize">{b.status}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -103,9 +145,7 @@ const ClientDashboard = () => {
                     <p className="text-ivory text-sm">{t.bundle_name} Bundle</p>
                     <p className="text-ivory-muted text-xs">
                       {new Date(t.created_at).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
+                        month: "short", day: "numeric", year: "numeric",
                       })}
                     </p>
                   </div>
