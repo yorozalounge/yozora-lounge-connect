@@ -13,6 +13,7 @@ import {
   Settings,
   User,
   Banknote,
+  Video,
 } from "lucide-react";
 
 interface Booking {
@@ -22,6 +23,7 @@ interface Booking {
   credits_charged: number;
   status: string;
   created_at: string;
+  room_url: string | null;
 }
 
 interface Availability {
@@ -268,11 +270,23 @@ const TalentDashboard = () => {
                             </p>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-gold text-sm font-heading">
-                            {b.credits_charged.toLocaleString()} credits
-                          </p>
-                          <p className="text-primary text-xs capitalize">{b.status}</p>
+                        <div className="flex items-center gap-3">
+                          <div className="text-right">
+                            <p className="text-gold text-sm font-heading">
+                              {b.credits_charged.toLocaleString()} credits
+                            </p>
+                            <p className="text-primary text-xs capitalize">{b.status}</p>
+                          </div>
+                          {b.room_url && (
+                            <a
+                              href={b.room_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-gold-solid text-[10px] py-2 px-4 flex items-center gap-1.5"
+                            >
+                              <Video size={12} /> Join
+                            </a>
+                          )}
                         </div>
                       </div>
                     ))}
