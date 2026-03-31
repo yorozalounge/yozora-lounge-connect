@@ -3,12 +3,22 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { CreditCard, Clock, LogOut } from "lucide-react";
+import { CreditCard, Clock, LogOut, History } from "lucide-react";
 import { Link } from "react-router-dom";
+
+interface Transaction {
+  id: string;
+  bundle_name: string;
+  credits_purchased: number;
+  bonus_credits: number;
+  amount_paid: number;
+  created_at: string;
+}
 
 const ClientDashboard = () => {
   const { user, signOut } = useAuth();
   const [profile, setProfile] = useState<{ full_name: string; credit_balance: number } | null>(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
     if (!user) return;
@@ -18,6 +28,14 @@ const ClientDashboard = () => {
       .eq("user_id", user.id)
       .single()
       .then(({ data }) => setProfile(data));
+
+    supabase
+      .from("credit_transactions")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(10)
+      .then(({ data }) => setTransactions((data as Transaction[]) || []));
   }, [user]);
 
   return (
@@ -44,7 +62,7 @@ const ClientDashboard = () => {
               <h2 className="small-caps-gold text-sm">Credit Balance</h2>
             </div>
             <p className="font-heading text-gold text-5xl mb-4">
-              {profile?.credit_balance ?? 0}
+              {(profile?.credit_balance ?? 0).toLocaleString()}
             </p>
             <p className="text-ivory-muted text-sm mb-6">credits available</p>
             <Link to="/credits" className="btn-gold-solid text-xs py-2 px-6 inline-block">
@@ -67,6 +85,40 @@ const ClientDashboard = () => {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Purchase History */}
+        <div className="bg-card-dark border border-gold-subtle p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <History size={20} className="text-gold" />
+            <h2 className="small-caps-gold text-sm">Purchase History</h2>
+          </div>
+          {transactions.length === 0 ? (
+            <p className="text-ivory-muted text-sm italic">No purchases yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {transactions.map((t) => (
+                <div key={t.id} className="flex items-center justify-between border-b border-gold-subtle pb-3 last:border-0">
+                  <div>
+                    <p className="text-ivory text-sm">{t.bundle_name} Bundle</p>
+                    <p className="text-ivory-muted text-xs">
+                      {new Date(t.created_at).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-gold text-sm font-heading">
+                      +{(t.credits_purchased + t.bonus_credits).toLocaleString()}
+                    </p>
+                    <p className="text-ivory-muted text-xs">${Number(t.amount_paid).toFixed(2)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <Footer />
