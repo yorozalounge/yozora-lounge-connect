@@ -22,6 +22,7 @@ interface Booking {
   credits_charged: number;
   status: string;
   created_at: string;
+  room_url: string | null;
 }
 
 const ClientDashboard = () => {
