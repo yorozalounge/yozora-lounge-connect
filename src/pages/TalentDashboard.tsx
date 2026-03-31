@@ -332,11 +332,24 @@ const TalentDashboard = () => {
                           })}
                         </p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-gold text-sm font-heading">
-                          +{b.credits_charged.toLocaleString()}
-                        </p>
-                        <p className="text-ivory-muted text-xs capitalize">{b.status}</p>
+                      <div className="text-right flex items-center gap-3">
+                        <div>
+                          <p className="text-gold text-sm font-heading">
+                            +{b.credits_charged.toLocaleString()}
+                          </p>
+                          <p className="text-ivory-muted text-xs capitalize">{b.status}</p>
+                        </div>
+                        {b.status === "confirmed" && !ratedBookings.has(b.id) && (
+                          <button
+                            onClick={() => setRatingTarget(b)}
+                            className="text-gold text-xs underline underline-offset-2 hover:opacity-80"
+                          >
+                            Rate
+                          </button>
+                        )}
+                        {ratedBookings.has(b.id) && (
+                          <span className="text-ivory-muted text-xs">Rated</span>
+                        )}
                       </div>
                     </div>
                   ))}
