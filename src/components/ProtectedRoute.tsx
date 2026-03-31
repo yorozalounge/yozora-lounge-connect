@@ -18,6 +18,15 @@ const ProtectedRoute = ({ children, requiredRole }: Props) => {
   }
 
   if (!user) return <Navigate to="/login" replace />;
+
+  if (!role) {
+    return (
+      <div className="min-h-screen bg-yozora flex items-center justify-center">
+        <p className="text-ivory-muted text-sm animate-pulse">Preparing your dashboard...</p>
+      </div>
+    );
+  }
+
   if (requiredRole && role !== requiredRole) {
     const dest = role === "admin" ? "/admin" : role === "talent" ? "/talent-dashboard" : "/client-dashboard";
     return <Navigate to={dest} replace />;

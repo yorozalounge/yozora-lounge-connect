@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, useRef } from "react";
+import { useState, useEffect, createContext, useContext, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 
@@ -25,50 +25,49 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
-  const initializedRef = useRef(false);
+  const authRequestId = useRef(0);
 
-  const fetchRole = async (userId: string): Promise<UserRole | null> => {
-    const { data } = await supabase
+  const fetchRole = useCallback(async (userId: string): Promise<UserRole | null> => {
+    const { data, error } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", userId)
-      .single();
-    const r = (data?.role as UserRole) ?? null;
-    setRole(r);
-    return r;
-  };
+      .maybeSingle();
+
+    if (error) {
+      console.error("Failed to fetch user role:", error);
+      return null;
+    }
+
+    return (data?.role as UserRole | null) ?? null;
+  }, []);
+
+  const syncAuthState = useCallback(async (nextSession: Session | null) => {
+    const requestId = ++authRequestId.current;
+
+    setLoading(true);
+    setSession(nextSession);
+    setUser(nextSession?.user ?? null);
+
+    const nextRole = nextSession?.user ? await fetchRole(nextSession.user.id) : null;
+
+    if (requestId !== authRequestId.current) return;
+
+    setRole(nextRole);
+    setLoading(false);
+  }, [fetchRole]);
 
   useEffect(() => {
-    // Set up listener first
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchRole(session.user.id);
-        } else {
-          setRole(null);
-        }
-        // Only set loading false from listener after initial load is done
-        if (initializedRef.current) {
-          setLoading(false);
-        }
-      }
-    );
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      void syncAuthState(nextSession);
+    });
 
-    // Initial session check
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        await fetchRole(session.user.id);
-      }
-      initializedRef.current = true;
-      setLoading(false);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      void syncAuthState(session);
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [syncAuthState]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
