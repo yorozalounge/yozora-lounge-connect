@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReviewSessionDialog from "@/components/talent-profile/ReviewSessionDialog";
+import TipPanel from "@/components/TipPanel";
 import RateClientDialog from "@/components/RateClientDialog";
 
 interface Booking {
@@ -131,6 +132,11 @@ const MySessions = () => {
                       <span>{b.credits_charged.toLocaleString()} credits</span>
                       <span>{new Date(b.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
                     </div>
+                    {client && b.status === "confirmed" && (
+                      <div className="w-full mt-2">
+                        <TipPanel bookingId={b.id} talentId={b.talent_id} talentName={b.talent_name} />
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2 flex-shrink-0">

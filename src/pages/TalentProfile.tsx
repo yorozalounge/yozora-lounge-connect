@@ -10,6 +10,7 @@ import TalentPricing from "@/components/talent-profile/TalentPricing";
 import TalentAvailability from "@/components/talent-profile/TalentAvailability";
 import TalentReviews from "@/components/talent-profile/TalentReviews";
 import ReviewSessionDialog from "@/components/talent-profile/ReviewSessionDialog";
+import TipPanel from "@/components/TipPanel";
 import { talents } from "@/data/talents";
 import { CheckCircle } from "lucide-react";
 
@@ -27,6 +28,7 @@ const TalentProfile = () => {
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [booking, setBooking] = useState(false);
   const [booked, setBooked] = useState(false);
+  const [bookedId, setBookedId] = useState<string | null>(null);
   const [unreviewedBooking, setUnreviewedBooking] = useState<UnreviewedBooking | null>(null);
   const [showReviewDialog, setShowReviewDialog] = useState(false);
   const [profileName, setProfileName] = useState("");
@@ -85,7 +87,7 @@ const TalentProfile = () => {
     const credits = getCreditsForDuration(selectedDuration);
     setBooking(true);
 
-    const { error } = await supabase.rpc("book_session", {
+    const { data, error } = await supabase.rpc("book_session", {
       _talent_id: talent.id,
       _talent_name: talent.name,
       _duration_minutes: selectedDuration,
@@ -105,6 +107,7 @@ const TalentProfile = () => {
       return;
     }
 
+    setBookedId(data as string);
     setBooked(true);
   };
 
@@ -119,9 +122,16 @@ const TalentProfile = () => {
             <p className="text-ivory text-sm leading-relaxed mb-2 opacity-80">
               Your {selectedDuration}-minute session with {talent.name} has been confirmed.
             </p>
-            <p className="text-gold text-sm mb-8">
+            <p className="text-gold text-sm mb-6">
               {getCreditsForDuration(selectedDuration!).toLocaleString()} credits deducted
             </p>
+
+            {bookedId && (
+              <div className="mb-8">
+                <TipPanel bookingId={bookedId} talentId={talent.id} talentName={talent.name} />
+              </div>
+            )}
+
             <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">Browse More Talents</Link>
           </div>
         </div>
