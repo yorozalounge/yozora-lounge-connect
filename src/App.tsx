@@ -18,6 +18,7 @@ import TalentProfile from "./pages/TalentProfile.tsx";
 import ClientDashboard from "./pages/ClientDashboard.tsx";
 import TalentDashboard from "./pages/TalentDashboard.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
+import Unsubscribe from "./pages/Unsubscribe.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const ScrollToTop = () => {
