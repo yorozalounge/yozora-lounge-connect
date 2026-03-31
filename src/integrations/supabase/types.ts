@@ -265,6 +265,51 @@ export type Database = {
         }
         Relationships: []
       }
+      talent_applications: {
+        Row: {
+          admin_notes: string | null
+          bio: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          portfolio_url: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          specialty: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          portfolio_url?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          specialty?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          portfolio_url?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          specialty?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       talent_availability: {
         Row: {
           created_at: string
@@ -389,6 +434,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      approve_talent_application: {
+        Args: { _application_id: string }
+        Returns: undefined
+      }
       book_session: {
         Args: {
           _credits: number
@@ -438,6 +487,10 @@ export type Database = {
           msg_id: number
           read_ct: number
         }[]
+      }
+      reject_talent_application: {
+        Args: { _application_id: string; _notes?: string }
+        Returns: undefined
       }
       upsert_availability: {
         Args: {
