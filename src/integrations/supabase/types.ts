@@ -200,6 +200,47 @@ export type Database = {
         }
         Relationships: []
       }
+      session_reviews: {
+        Row: {
+          booking_id: string
+          created_at: string
+          id: string
+          rating: number
+          review_text: string | null
+          reviewer_id: string
+          reviewer_name: string
+          talent_id: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          review_text?: string | null
+          reviewer_id: string
+          reviewer_name?: string
+          talent_id: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          review_text?: string | null
+          reviewer_id?: string
+          reviewer_name?: string
+          talent_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       suppressed_emails: {
         Row: {
           created_at: string
@@ -286,6 +327,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      talent_session_ratings: {
+        Row: {
+          booking_id: string
+          client_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          rating: number
+          talent_user_id: string
+        }
+        Insert: {
+          booking_id: string
+          client_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          rating: number
+          talent_user_id: string
+        }
+        Update: {
+          booking_id?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          rating?: number
+          talent_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_session_ratings_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
