@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          client_id: string
+          client_name: string
+          created_at: string
+          credits_charged: number
+          duration_minutes: number
+          id: string
+          status: string
+          talent_id: string
+          talent_name: string
+        }
+        Insert: {
+          client_id: string
+          client_name?: string
+          created_at?: string
+          credits_charged: number
+          duration_minutes: number
+          id?: string
+          status?: string
+          talent_id: string
+          talent_name: string
+        }
+        Update: {
+          client_id?: string
+          client_name?: string
+          created_at?: string
+          credits_charged?: number
+          duration_minutes?: number
+          id?: string
+          status?: string
+          talent_id?: string
+          talent_name?: string
+        }
+        Relationships: []
+      }
       credit_transactions: {
         Row: {
           amount_paid: number
@@ -97,6 +133,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      book_session: {
+        Args: {
+          _credits: number
+          _duration_minutes: number
+          _talent_id: string
+          _talent_name: string
+        }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
