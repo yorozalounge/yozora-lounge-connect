@@ -22,6 +22,7 @@ export type Database = {
           credits_charged: number
           duration_minutes: number
           id: string
+          room_url: string | null
           status: string
           talent_id: string
           talent_name: string
@@ -33,6 +34,7 @@ export type Database = {
           credits_charged: number
           duration_minutes: number
           id?: string
+          room_url?: string | null
           status?: string
           talent_id: string
           talent_name: string
@@ -44,6 +46,7 @@ export type Database = {
           credits_charged?: number
           duration_minutes?: number
           id?: string
+          room_url?: string | null
           status?: string
           talent_id?: string
           talent_name?: string
