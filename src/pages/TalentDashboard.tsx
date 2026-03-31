@@ -96,6 +96,14 @@ const TalentDashboard = () => {
               setBookings(b);
               setTotalEarnings(b.reduce((s, bk) => s + bk.credits_charged, 0));
             });
+          // Fetch which bookings talent already rated
+          supabase
+            .from("talent_session_ratings")
+            .select("booking_id")
+            .eq("talent_user_id", user.id)
+            .then(({ data: ratings }) => {
+              setRatedBookings(new Set((ratings || []).map((r: any) => r.booking_id)));
+            });
         }
       });
 
