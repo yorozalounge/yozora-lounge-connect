@@ -73,6 +73,7 @@ const AdminDashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
   const [payouts, setPayouts] = useState<Payout[]>([]);
+  const [applications, setApplications] = useState<TalentApplication[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
