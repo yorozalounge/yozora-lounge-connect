@@ -87,7 +87,7 @@ const TalentProfile = () => {
     const credits = getCreditsForDuration(selectedDuration);
     setBooking(true);
 
-    const { error } = await supabase.rpc("book_session", {
+    const { data, error } = await supabase.rpc("book_session", {
       _talent_id: talent.id,
       _talent_name: talent.name,
       _duration_minutes: selectedDuration,
@@ -107,6 +107,7 @@ const TalentProfile = () => {
       return;
     }
 
+    setBookedId(data as string);
     setBooked(true);
   };
 
