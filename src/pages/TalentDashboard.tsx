@@ -13,6 +13,7 @@ import {
   Settings,
   User,
   Banknote,
+  Video,
 } from "lucide-react";
 
 interface Booking {
