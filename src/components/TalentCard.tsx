@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import { Link } from "react-router-dom";
 import type { Talent } from "@/data/talents";
 
 const TalentCard = ({ talent }: { talent: Talent }) => (
@@ -39,7 +40,9 @@ const TalentCard = ({ talent }: { talent: Talent }) => (
         <span className="text-ivory-muted text-xs">· {talent.sessions} sessions</span>
       </div>
       <p className="text-gold text-sm mb-4">From {talent.credits.toLocaleString()} credits</p>
-      <button className="btn-gold-outline w-full text-xs py-2">View Profile</button>
+      <Link to={`/talent/${talent.id}`} className="btn-gold-outline w-full text-xs py-2 block text-center">
+        Book Session
+      </Link>
     </div>
   </div>
 );
