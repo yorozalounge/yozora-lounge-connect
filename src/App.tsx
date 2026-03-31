@@ -19,6 +19,12 @@ import ClientDashboard from "./pages/ClientDashboard.tsx";
 import TalentDashboard from "./pages/TalentDashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+};
+
 const queryClient = new QueryClient();
 
 const App = () => (
