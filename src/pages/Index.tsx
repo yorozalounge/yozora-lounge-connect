@@ -27,7 +27,7 @@ const Index = () => (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <ConstellationBg />
       <div className="relative z-10 text-center px-6 max-w-5xl">
-        <img src={logo} alt="Yozora Lounge" className="w-[80vw] md:w-[65vw] lg:w-[50vw] h-auto mb-0 mx-auto" />
+        <img src={logo} alt="Yozora Lounge" className="w-[85vw] md:w-[75vw] lg:w-[65vw] h-auto mb-0 mx-auto" />
         <p className="font-heading italic text-ivory text-xl md:text-2xl mb-6 opacity-80 -mt-16 md:-mt-20 lg:-mt-24">
           Where the Night Begins
         </p>
