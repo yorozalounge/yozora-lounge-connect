@@ -233,12 +233,15 @@ const ClientDashboard = () => {
                       <td className="text-ivory-muted py-3 pr-4">{b.duration_minutes} min</td>
                       <td className="text-gold py-3 pr-4 font-heading">{b.credits_charged.toLocaleString()}</td>
                       <td className="py-3 pr-4">
-                        {b.status === "completed" ? (
-                          <div className="flex gap-0.5">
-                            {[1, 2, 3, 4, 5].map((s) => (
-                              <Star key={s} size={12} className="text-gold fill-gold" />
-                            ))}
-                          </div>
+                        {reviewedBookings.has(b.id) ? (
+                          <span className="text-ivory-muted text-xs">Reviewed</span>
+                        ) : b.status === "confirmed" ? (
+                          <button
+                            onClick={() => setReviewTarget(b)}
+                            className="text-gold text-xs underline underline-offset-2 hover:opacity-80"
+                          >
+                            Leave Review
+                          </button>
                         ) : (
                           <span className="text-ivory-muted text-xs">—</span>
                         )}
