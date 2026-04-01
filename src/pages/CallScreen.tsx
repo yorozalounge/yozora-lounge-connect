@@ -193,7 +193,7 @@ const CallScreen = () => {
                   >
                     <span className="font-heading">{opt.label}</span>
                     <span className="text-muted-foreground text-xs">
-                      {(perMinuteRate * opt.minutes).toLocaleString()} cr
+                      {getExtensionCost(opt.minutes).toLocaleString()} cr
                     </span>
                     {extending === opt.minutes && (
                       <Sparkles size={14} className="text-primary animate-pulse" />
