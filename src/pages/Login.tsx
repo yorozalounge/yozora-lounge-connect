@@ -37,7 +37,7 @@ const Login = () => {
       <Navbar />
       <div className="pt-40 pb-20 px-6 max-w-md mx-auto">
         <h1 className="font-heading text-gold tracking-[0.2em] text-3xl text-center mb-2">
-          Welcome Back
+          Where the Night Begins
         </h1>
         <p className="small-caps-ivory text-[10px] opacity-50 text-center mb-12">
           Sign in to your account
