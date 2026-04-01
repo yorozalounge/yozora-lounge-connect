@@ -1,10 +1,11 @@
+import { Globe, CalendarDays, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const steps = [
-  { num: "01", title: "Browse", desc: "Explore our curated selection of extraordinary talents from around the world. Each profile features detailed information about their background, languages spoken, cultural expertise, and conversation specialties. Read reviews from other clients to find the perfect match for your interests.", icon: "🌍" },
-  { num: "02", title: "Book", desc: "Choose your preferred session length — 20, 40, or 60 minutes. Purchase credits through our secure payment system. Credits never expire and can be used across any talent on the platform. Select your preferred date and time that works across time zones.", icon: "📅" },
-  { num: "03", title: "Connect", desc: "Join your private video session from anywhere in the world. Our platform ensures crystal-clear video and audio quality. Enjoy authentic cultural exchange, language practice, or simply engaging conversation with remarkable women from diverse backgrounds.", icon: "✨" },
+  { num: "01", title: "Browse", desc: "Explore our curated selection of extraordinary talents from around the world. Each profile features detailed information about their background, languages spoken, cultural expertise, and conversation specialties. Read reviews from other clients to find the perfect match for your interests.", Icon: Globe },
+  { num: "02", title: "Book", desc: "Choose your preferred session length — 20, 40, or 60 minutes. Purchase credits through our secure payment system. Credits never expire and can be used across any talent on the platform. Select your preferred date and time that works across time zones.", Icon: CalendarDays },
+  { num: "03", title: "Connect", desc: "Join your private video session from anywhere in the world. Our platform ensures crystal-clear video and audio quality. Enjoy authentic cultural exchange, language practice, or simply engaging conversation with remarkable women from diverse backgrounds.", Icon: Sparkles },
 ];
 
 const HowItWorksPage = () => (
@@ -22,7 +23,7 @@ const HowItWorksPage = () => (
               {s.num}
             </span>
             <div className="relative pl-4">
-              <span className="text-3xl mb-4 block">{s.icon}</span>
+              <s.Icon size={28} className="text-gold mb-4" strokeWidth={1.2} />
               <h2 className="small-caps-ivory text-lg mb-4">{s.title}</h2>
               <p className="text-ivory-muted text-sm leading-relaxed max-w-2xl">{s.desc}</p>
             </div>
