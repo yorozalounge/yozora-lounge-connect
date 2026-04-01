@@ -93,6 +93,12 @@ const CallScreen = () => {
 
   const perMinuteRate = booking ? Math.ceil(booking.credits_charged / booking.duration_minutes) : 0;
 
+  const getExtensionCost = (minutes: number) => {
+    const raw = perMinuteRate * minutes;
+    if (minutes === 10) return Math.max(1000, Math.min(5000, raw));
+    return Math.max(2000, Math.min(8000, raw));
+  };
+
   const handleExtend = async (minutes: number) => {
     if (!booking) return;
     setExtending(minutes);
