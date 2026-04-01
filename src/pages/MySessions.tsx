@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Star, Clock, Video } from "lucide-react";
+import { Star, Clock, Video, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
@@ -132,10 +132,24 @@ const MySessions = () => {
                       <span>{b.credits_charged.toLocaleString()} credits</span>
                       <span>{new Date(b.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
                     </div>
-                    {client && b.status === "confirmed" && (
-                      <div className="w-full mt-2">
-                        <TipPanel bookingId={b.id} talentId={b.talent_id} talentName={b.talent_name} />
-                      </div>
+                    {client && b.status === "confirmed" && b.room_url && (
+                      <Link
+                        to={`/call/${b.id}`}
+                        className="inline-flex items-center gap-1.5 mt-2 text-xs text-primary hover:underline"
+                      >
+                        <Video size={14} /> Join Call
+                        <Gift size={12} className="ml-1 opacity-60" />
+                      </Link>
+                    )}
+                    {!client && b.status === "confirmed" && b.room_url && (
+                      <a
+                        href={b.room_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 mt-2 text-xs text-primary hover:underline"
+                      >
+                        <Video size={14} /> Join Call
+                      </a>
                     )}
                   </div>
 

@@ -14,6 +14,7 @@ import SignupClient from "./pages/SignupClient.tsx";
 import SignupTalent from "./pages/SignupTalent.tsx";
 import TalentProfile from "./pages/TalentProfile.tsx";
 import MySessions from "./pages/MySessions.tsx";
+import CallScreen from "./pages/CallScreen.tsx";
 import Unsubscribe from "./pages/Unsubscribe.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/signup/talent" element={<SignupTalent />} />
           <Route path="/talent/:id" element={<TalentProfile />} />
           <Route path="/my-sessions" element={<MySessions />} />
+          <Route path="/call/:bookingId" element={<CallScreen />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
