@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const Footer = () => (
   <footer className="bg-yozora border-t border-gold-subtle">
     <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
         <div>
-          <h3 className="font-heading text-gold tracking-[0.3em] text-xl uppercase mb-4">
-            Yozora Lounge
-          </h3>
+          <img src={logo} alt="Yozora Lounge" className="w-40 h-auto mb-2" />
           <p className="text-ivory font-heading italic text-sm opacity-70">
             Where the Night Begins
           </p>
