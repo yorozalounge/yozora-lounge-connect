@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Star, Clock, Video, Gift } from "lucide-react";
+import { Star, Clock, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
@@ -42,27 +42,17 @@ const MySessions = () => {
     setLoading(true);
 
     // Fetch profile name
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("full_name")
-      .eq("user_id", user.id)
-      .single();
+    const { data: profile } = await supabase.from("profiles").select("full_name").eq("user_id", user.id).single();
     setProfileName(profile?.full_name || "");
 
     // Fetch bookings (user could be client or talent — RLS handles access)
-    const { data: bookingData } = await supabase
-      .from("bookings")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const { data: bookingData } = await supabase.from("bookings").select("*").order("created_at", { ascending: false });
 
     const rows = (bookingData as Booking[]) || [];
     setBookings(rows);
 
     // Fetch which bookings the user already reviewed (as client)
-    const { data: reviews } = await supabase
-      .from("session_reviews")
-      .select("booking_id")
-      .eq("reviewer_id", user.id);
+    const { data: reviews } = await supabase.from("session_reviews").select("booking_id").eq("reviewer_id", user.id);
     setReviewedBookingIds(new Set((reviews || []).map((r) => r.booking_id)));
 
     // Fetch which bookings the user already rated (as talent)
@@ -106,7 +96,9 @@ const MySessions = () => {
         ) : bookings.length === 0 ? (
           <div className="border border-border p-12 text-center">
             <p className="text-foreground text-sm mb-4 opacity-70">No sessions yet.</p>
-            <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">Browse Creators</Link>
+            <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">
+              Browse Creators
+            </Link>
           </div>
         ) : (
           <div className="space-y-4">
@@ -128,17 +120,24 @@ const MySessions = () => {
                       )}
                     </p>
                     <div className="flex items-center gap-3 mt-1 text-muted-foreground text-xs">
-                      <span className="flex items-center gap-1"><Clock size={12} /> {b.duration_minutes} min</span>
+                      <span className="flex items-center gap-1">
+                        <Clock size={12} /> {b.duration_minutes} min
+                      </span>
                       <span>{b.credits_charged.toLocaleString()} credits</span>
-                      <span>{new Date(b.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+                      <span>
+                        {new Date(b.created_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
                     </div>
                     {client && b.status === "confirmed" && b.room_url && (
                       <Link
                         to={`/call/${b.id}`}
                         className="inline-flex items-center gap-1.5 mt-2 text-xs text-primary hover:underline"
                       >
-                        <Video size={14} /> Join Call
-                        <Gift size={12} className="ml-1 opacity-60" />
+                        <Video size={14} /> Join Session
                       </Link>
                     )}
                     {!client && b.status === "confirmed" && b.room_url && (
@@ -154,36 +153,38 @@ const MySessions = () => {
                   </div>
 
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className={`text-xs uppercase tracking-wider px-2 py-1 border ${
-                      b.status === "confirmed" ? "border-primary/30 text-primary" : "border-border text-muted-foreground"
-                    }`}>
+                    <span
+                      className={`text-xs uppercase tracking-wider px-2 py-1 border ${
+                        b.status === "confirmed"
+                          ? "border-primary/30 text-primary"
+                          : "border-border text-muted-foreground"
+                      }`}
+                    >
                       {b.status}
                     </span>
 
                     {canReview && (
-                      <button
-                        onClick={() => setReviewTarget(b)}
-                        className="btn-gold-outline text-[10px] py-1.5 px-3"
-                      >
+                      <button onClick={() => setReviewTarget(b)} className="btn-gold-outline text-[10px] py-1.5 px-3">
                         Leave Review
                       </button>
                     )}
 
                     {canRate && (
-                      <button
-                        onClick={() => setRateTarget(b)}
-                        className="btn-gold-outline text-[10px] py-1.5 px-3"
-                      >
+                      <button onClick={() => setRateTarget(b)} className="btn-gold-outline text-[10px] py-1.5 px-3">
                         Rate Client
                       </button>
                     )}
 
                     {reviewedBookingIds.has(b.id) && client && (
-                      <span className="text-xs text-primary flex items-center gap-1"><Star size={12} className="fill-primary" /> Reviewed</span>
+                      <span className="text-xs text-primary flex items-center gap-1">
+                        <Star size={12} className="fill-primary" /> Reviewed
+                      </span>
                     )}
 
                     {ratedBookingIds.has(b.id) && !client && (
-                      <span className="text-xs text-muted-foreground flex items-center gap-1"><Star size={12} /> Rated</span>
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Star size={12} /> Rated
+                      </span>
                     )}
                   </div>
                 </div>
@@ -200,7 +201,10 @@ const MySessions = () => {
           talentName={reviewTarget.talent_name}
           reviewerName={profileName}
           onClose={() => setReviewTarget(null)}
-          onSubmitted={() => { setReviewTarget(null); fetchData(); }}
+          onSubmitted={() => {
+            setReviewTarget(null);
+            fetchData();
+          }}
         />
       )}
 
@@ -210,7 +214,10 @@ const MySessions = () => {
           clientId={rateTarget.client_id}
           clientName={rateTarget.client_name || "Client"}
           onClose={() => setRateTarget(null)}
-          onSubmitted={() => { setRateTarget(null); fetchData(); }}
+          onSubmitted={() => {
+            setRateTarget(null);
+            fetchData();
+          }}
         />
       )}
 
