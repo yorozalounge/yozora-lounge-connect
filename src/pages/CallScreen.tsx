@@ -91,7 +91,41 @@ const CallScreen = () => {
     setTimeout(() => setLastGift(null), 2500);
   };
 
-  if (authLoading || loading) {
+  const perMinuteRate = booking ? Math.ceil(booking.credits_charged / booking.duration_minutes) : 0;
+
+  const handleExtend = async (minutes: number) => {
+    if (!booking) return;
+    setExtending(minutes);
+
+    const { error } = await supabase.rpc("extend_session", {
+      _booking_id: booking.id,
+      _extra_minutes: minutes,
+    });
+
+    setExtending(null);
+
+    if (error) {
+      toast({
+        title: "Extension failed",
+        description: error.message.includes("Insufficient")
+          ? "You don't have enough credits."
+          : error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const cost = perMinuteRate * minutes;
+    setBooking((prev) =>
+      prev ? { ...prev, duration_minutes: prev.duration_minutes + minutes } : prev
+    );
+    toast({
+      title: `+${minutes} minutes added!`,
+      description: `${cost.toLocaleString()} credits deducted.`,
+    });
+    setShowExtend(false);
+  };
+
     return (
       <div className="bg-black min-h-screen flex items-center justify-center">
         <p className="text-muted-foreground text-sm">Loading call...</p>
