@@ -48,6 +48,7 @@ const App = () => (
           <Route path="/my-sessions" element={<MySessions />} />
           <Route path="/call/:bookingId" element={<CallScreen />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
