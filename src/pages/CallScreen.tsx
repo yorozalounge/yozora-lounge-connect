@@ -75,9 +75,7 @@ const CallScreen = () => {
     if (error) {
       toast({
         title: "Transfer failed",
-        description: error.message.includes("Insufficient")
-          ? "You don't have enough credits."
-          : error.message,
+        description: error.message.includes("Insufficient") ? "You don't have enough credits." : error.message,
         variant: "destructive",
       });
       return;
@@ -113,18 +111,14 @@ const CallScreen = () => {
     if (error) {
       toast({
         title: "Extension failed",
-        description: error.message.includes("Insufficient")
-          ? "You don't have enough credits."
-          : error.message,
+        description: error.message.includes("Insufficient") ? "You don't have enough credits." : error.message,
         variant: "destructive",
       });
       return;
     }
 
     const cost = getExtensionCost(minutes);
-    setBooking((prev) =>
-      prev ? { ...prev, duration_minutes: prev.duration_minutes + minutes } : prev
-    );
+    setBooking((prev) => (prev ? { ...prev, duration_minutes: prev.duration_minutes + minutes } : prev));
     toast({
       title: `+${minutes} minutes added!`,
       description: `${cost.toLocaleString()} credits deducted.`,
@@ -169,9 +163,7 @@ const CallScreen = () => {
           <ArrowLeft size={16} />
           <span className="hidden sm:inline">Back</span>
         </button>
-        <span className="text-white/80 text-xs font-heading tracking-[0.15em]">
-          {booking.talent_name}
-        </span>
+        <span className="text-white/80 text-xs font-heading tracking-[0.15em]">{booking.talent_name}</span>
       </div>
 
       {/* Client controls */}
@@ -195,15 +187,11 @@ const CallScreen = () => {
                     <span className="text-muted-foreground text-xs">
                       {getExtensionCost(opt.minutes).toLocaleString()} cr
                     </span>
-                    {extending === opt.minutes && (
-                      <Sparkles size={14} className="text-primary animate-pulse" />
-                    )}
+                    {extending === opt.minutes && <Sparkles size={14} className="text-primary animate-pulse" />}
                   </button>
                 ))}
               </div>
-              <p className="text-[9px] text-muted-foreground mt-2 text-center opacity-60">
-                Creator receives 60%
-              </p>
+              <p className="text-[9px] text-muted-foreground mt-2 text-center opacity-60"></p>
             </div>
           )}
 
@@ -221,48 +209,53 @@ const CallScreen = () => {
                     disabled={sending !== null}
                     className={`
                       flex items-center gap-2 px-4 py-2.5 rounded-md text-sm transition-all duration-200
-                      ${lastGift === opt.amount
-                        ? "bg-primary/20 text-primary scale-105 border border-primary/40"
-                        : "bg-muted/50 text-foreground hover:bg-primary/10 hover:text-primary border border-transparent"
+                      ${
+                        lastGift === opt.amount
+                          ? "bg-primary/20 text-primary scale-105 border border-primary/40"
+                          : "bg-muted/50 text-foreground hover:bg-primary/10 hover:text-primary border border-transparent"
                       }
                       disabled:opacity-40
                     `}
                   >
                     <span className="text-lg">{opt.icon}</span>
                     <span className="font-heading text-primary min-w-[3rem]">{opt.label}</span>
-                    {sending === opt.amount && (
-                      <Sparkles size={14} className="text-primary animate-pulse" />
-                    )}
+                    {sending === opt.amount && <Sparkles size={14} className="text-primary animate-pulse" />}
                   </button>
                 ))}
               </div>
-              <p className="text-[9px] text-muted-foreground mt-2 text-center opacity-60">
-                Creator receives 50%
-              </p>
+              <p className="text-[9px] text-muted-foreground mt-2 text-center opacity-60"></p>
             </div>
           )}
 
           {/* Action buttons */}
           <div className="flex gap-3">
             <button
-              onClick={() => { setShowExtend(!showExtend); setShowGifts(false); }}
+              onClick={() => {
+                setShowExtend(!showExtend);
+                setShowGifts(false);
+              }}
               className={`
                 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300
-                ${showExtend
-                  ? "bg-accent text-accent-foreground rotate-12 scale-110"
-                  : "bg-accent/90 text-accent-foreground hover:bg-accent hover:scale-105"
+                ${
+                  showExtend
+                    ? "bg-accent text-accent-foreground rotate-12 scale-110"
+                    : "bg-accent/90 text-accent-foreground hover:bg-accent hover:scale-105"
                 }
               `}
             >
               <Clock size={24} />
             </button>
             <button
-              onClick={() => { setShowGifts(!showGifts); setShowExtend(false); }}
+              onClick={() => {
+                setShowGifts(!showGifts);
+                setShowExtend(false);
+              }}
               className={`
                 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300
-                ${showGifts
-                  ? "bg-primary text-primary-foreground rotate-12 scale-110"
-                  : "bg-primary/90 text-primary-foreground hover:bg-primary hover:scale-105"
+                ${
+                  showGifts
+                    ? "bg-primary text-primary-foreground rotate-12 scale-110"
+                    : "bg-primary/90 text-primary-foreground hover:bg-primary hover:scale-105"
                 }
               `}
             >
