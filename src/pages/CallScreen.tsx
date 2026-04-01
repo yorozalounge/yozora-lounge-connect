@@ -30,11 +30,15 @@ const CallScreen = () => {
     talent_name: string;
     client_id: string;
     room_url: string | null;
+    credits_charged: number;
+    duration_minutes: number;
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState<number | null>(null);
   const [lastGift, setLastGift] = useState<number | null>(null);
   const [showGifts, setShowGifts] = useState(false);
+  const [extending, setExtending] = useState<number | null>(null);
+  const [showExtend, setShowExtend] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/login");
