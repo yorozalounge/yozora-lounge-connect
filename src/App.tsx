@@ -17,6 +17,7 @@ import MySessions from "./pages/MySessions.tsx";
 import CallScreen from "./pages/CallScreen.tsx";
 import Unsubscribe from "./pages/Unsubscribe.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import AdminDashboard from "./pages/AdminDashboard.tsx";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
