@@ -126,6 +126,7 @@ const CallScreen = () => {
     setShowExtend(false);
   };
 
+  if (authLoading || loading) {
     return (
       <div className="bg-black min-h-screen flex items-center justify-center">
         <p className="text-muted-foreground text-sm">Loading call...</p>
@@ -146,7 +147,6 @@ const CallScreen = () => {
 
   return (
     <div className="bg-black min-h-screen relative overflow-hidden">
-      {/* Video iframe */}
       <iframe
         src={booking.room_url}
         className="w-full h-screen border-0"
@@ -168,9 +168,39 @@ const CallScreen = () => {
         </span>
       </div>
 
-      {/* Gift button (clients only) */}
+      {/* Client controls */}
       {isClient && (
         <div className="absolute bottom-6 right-6 z-20 flex flex-col items-end gap-3">
+          {/* Extend time panel */}
+          {showExtend && (
+            <div className="bg-background/95 backdrop-blur-md border border-border rounded-lg p-3 mb-2 animate-in slide-in-from-bottom-4 fade-in duration-200">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-[0.15em] mb-2 text-center">
+                Extend Call
+              </p>
+              <div className="flex flex-col gap-2">
+                {EXTENSION_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.minutes}
+                    onClick={() => handleExtend(opt.minutes)}
+                    disabled={extending !== null}
+                    className="flex items-center justify-between gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 bg-muted/50 text-foreground hover:bg-accent/20 hover:text-accent-foreground border border-transparent disabled:opacity-40"
+                  >
+                    <span className="font-heading">{opt.label}</span>
+                    <span className="text-muted-foreground text-xs">
+                      {(perMinuteRate * opt.minutes).toLocaleString()} cr
+                    </span>
+                    {extending === opt.minutes && (
+                      <Sparkles size={14} className="text-primary animate-pulse" />
+                    )}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[9px] text-muted-foreground mt-2 text-center opacity-60">
+                Based on session rate
+              </p>
+            </div>
+          )}
+
           {/* Gift options panel */}
           {showGifts && (
             <div className="bg-background/95 backdrop-blur-md border border-border rounded-lg p-3 mb-2 animate-in slide-in-from-bottom-4 fade-in duration-200">
@@ -206,19 +236,33 @@ const CallScreen = () => {
             </div>
           )}
 
-          {/* Toggle button */}
-          <button
-            onClick={() => setShowGifts(!showGifts)}
-            className={`
-              w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300
-              ${showGifts
-                ? "bg-primary text-primary-foreground rotate-12 scale-110"
-                : "bg-primary/90 text-primary-foreground hover:bg-primary hover:scale-105"
-              }
-            `}
-          >
-            <Gift size={24} />
-          </button>
+          {/* Action buttons */}
+          <div className="flex gap-3">
+            <button
+              onClick={() => { setShowExtend(!showExtend); setShowGifts(false); }}
+              className={`
+                w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300
+                ${showExtend
+                  ? "bg-accent text-accent-foreground rotate-12 scale-110"
+                  : "bg-accent/90 text-accent-foreground hover:bg-accent hover:scale-105"
+                }
+              `}
+            >
+              <Clock size={24} />
+            </button>
+            <button
+              onClick={() => { setShowGifts(!showGifts); setShowExtend(false); }}
+              className={`
+                w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300
+                ${showGifts
+                  ? "bg-primary text-primary-foreground rotate-12 scale-110"
+                  : "bg-primary/90 text-primary-foreground hover:bg-primary hover:scale-105"
+                }
+              `}
+            >
+              <Gift size={24} />
+            </button>
+          </div>
         </div>
       )}
     </div>
