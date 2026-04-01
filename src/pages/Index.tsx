@@ -89,7 +89,7 @@ const Index = () => (
             <Star key={i} size={16} className="fill-primary text-primary" />
           ))}
         </div>
-        <p className="small-caps-ivory text-[10px] opacity-50">Based on 500+ reviews</p>
+        
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {reviews.map((r, i) => (
