@@ -74,7 +74,7 @@ const TalentsPage = () => {
             </div>
           </div>
 
-          <span className="small-caps-gold">{filtered.length} Talent{filtered.length !== 1 ? "s" : ""} Available</span>
+          <span className="small-caps-gold">{approvedCount !== null ? approvedCount : filtered.length} Talent{(approvedCount !== null ? approvedCount : filtered.length) !== 1 ? "s" : ""} Available</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
