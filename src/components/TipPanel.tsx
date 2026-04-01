@@ -36,9 +36,7 @@ const TipPanel = ({ bookingId, talentId, talentName }: TipPanelProps) => {
     if (error) {
       toast({
         title: "Tip failed",
-        description: error.message.includes("Insufficient")
-          ? "You don't have enough credits."
-          : error.message,
+        description: error.message.includes("Insufficient") ? "You don't have enough credits." : error.message,
         variant: "destructive",
       });
       return;
@@ -47,7 +45,7 @@ const TipPanel = ({ bookingId, talentId, talentName }: TipPanelProps) => {
     setLastTip(amount);
     toast({
       title: `${amount.toLocaleString()} credits sent!`,
-      description: `${talentName} received ${(amount / 2).toLocaleString()} credits.`,
+      description: `Your gift has been sent to ${talentName} 🌙`,
     });
 
     setTimeout(() => setLastTip(null), 2000);
@@ -68,25 +66,22 @@ const TipPanel = ({ bookingId, talentId, talentName }: TipPanelProps) => {
             disabled={sending !== null}
             className={`
               relative flex items-center gap-1.5 px-3 py-2 border text-xs transition-all duration-200
-              ${lastTip === opt.amount
-                ? "border-primary bg-primary/20 text-primary scale-105"
-                : "border-border text-foreground hover:border-primary/40 hover:bg-primary/5"
+              ${
+                lastTip === opt.amount
+                  ? "border-primary bg-primary/20 text-primary scale-105"
+                  : "border-border text-foreground hover:border-primary/40 hover:bg-primary/5"
               }
               disabled:opacity-40
             `}
           >
             <span>{opt.emoji}</span>
             <span className="font-heading text-primary">{opt.label}</span>
-            {sending === opt.amount && (
-              <Sparkles size={12} className="text-primary animate-pulse" />
-            )}
+            {sending === opt.amount && <Sparkles size={12} className="text-primary animate-pulse" />}
           </button>
         ))}
       </div>
 
-      <p className="text-muted-foreground text-[10px] mt-2 opacity-60">
-        
-      </p>
+      <p className="text-muted-foreground text-[10px] mt-2 opacity-60"></p>
     </div>
   );
 };
