@@ -93,6 +93,12 @@ const CallScreen = () => {
 
   const perMinuteRate = booking ? Math.ceil(booking.credits_charged / booking.duration_minutes) : 0;
 
+  const getExtensionCost = (minutes: number) => {
+    const raw = perMinuteRate * minutes;
+    if (minutes === 10) return Math.max(1000, Math.min(5000, raw));
+    return Math.max(2000, Math.min(8000, raw));
+  };
+
   const handleExtend = async (minutes: number) => {
     if (!booking) return;
     setExtending(minutes);
@@ -115,7 +121,7 @@ const CallScreen = () => {
       return;
     }
 
-    const cost = perMinuteRate * minutes;
+    const cost = getExtensionCost(minutes);
     setBooking((prev) =>
       prev ? { ...prev, duration_minutes: prev.duration_minutes + minutes } : prev
     );
@@ -187,7 +193,7 @@ const CallScreen = () => {
                   >
                     <span className="font-heading">{opt.label}</span>
                     <span className="text-muted-foreground text-xs">
-                      {(perMinuteRate * opt.minutes).toLocaleString()} cr
+                      {getExtensionCost(opt.minutes).toLocaleString()} cr
                     </span>
                     {extending === opt.minutes && (
                       <Sparkles size={14} className="text-primary animate-pulse" />
@@ -196,7 +202,7 @@ const CallScreen = () => {
                 ))}
               </div>
               <p className="text-[9px] text-muted-foreground mt-2 text-center opacity-60">
-                Based on session rate
+                Creator receives 60%
               </p>
             </div>
           )}
