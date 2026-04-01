@@ -202,7 +202,8 @@ const CallScreen = () => {
                 ))}
               </div>
               <p className="text-[9px] text-muted-foreground mt-2 text-center opacity-60">
-                Based on session rate
+                Creator receives 60%
+              </p>
               </p>
             </div>
           )}
