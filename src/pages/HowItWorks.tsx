@@ -23,7 +23,7 @@ const HowItWorksPage = () => (
               {s.num}
             </span>
             <div className="relative pl-4">
-              <span className="text-3xl mb-4 block">{s.icon}</span>
+              <s.Icon size={28} className="text-gold mb-4" strokeWidth={1.2} />
               <h2 className="small-caps-ivory text-lg mb-4">{s.title}</h2>
               <p className="text-ivory-muted text-sm leading-relaxed max-w-2xl">{s.desc}</p>
             </div>
