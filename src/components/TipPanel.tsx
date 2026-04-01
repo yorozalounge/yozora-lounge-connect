@@ -85,7 +85,7 @@ const TipPanel = ({ bookingId, talentId, talentName }: TipPanelProps) => {
       </div>
 
       <p className="text-muted-foreground text-[10px] mt-2 opacity-60">
-        Creator receives 50% of tip value
+        
       </p>
     </div>
   );
