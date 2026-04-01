@@ -185,22 +185,28 @@ const TalentAvailability = ({
           <p className="text-ivory text-xs mb-3 opacity-70">
             Available times for <span className="text-gold font-medium">{MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getDate()}</span>
           </p>
-          <div className="flex flex-wrap gap-2">
-            {selectedSlots.map((time) => (
-              <button
-                type="button"
-                key={time}
-                onClick={() => onSelectTime(selectedTime === time ? null : time)}
-                className={`text-xs py-1.5 px-3 border transition-colors ${
-                  selectedTime === time
-                    ? "border-gold-subtle bg-primary/20 text-gold"
-                    : "border-gold-subtle bg-primary/5 text-ivory hover:bg-primary/10"
-                }`}
-              >
-                {time}
-              </button>
-            ))}
-          </div>
+          {selectedSlots.length === 0 ? (
+            <p className="text-ivory-muted text-xs opacity-60">
+              No available times for this date — please select another day
+            </p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {selectedSlots.map((time) => (
+                <button
+                  type="button"
+                  key={time}
+                  onClick={() => onSelectTime(selectedTime === time ? null : time)}
+                  className={`text-xs py-1.5 px-3 border transition-colors ${
+                    selectedTime === time
+                      ? "border-gold-subtle bg-primary/20 text-gold"
+                      : "border-gold-subtle bg-primary/5 text-ivory hover:bg-primary/10"
+                  }`}
+                >
+                  {time}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
