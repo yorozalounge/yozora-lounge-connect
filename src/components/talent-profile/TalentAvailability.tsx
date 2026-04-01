@@ -40,14 +40,25 @@ const MONTH_NAMES = [
   "July", "August", "September", "October", "November", "December",
 ];
 
-const TalentAvailability = () => {
+interface TalentAvailabilityProps {
+  selectedDate: Date | null;
+  selectedTime: string | null;
+  onSelectDate: (date: Date | null) => void;
+  onSelectTime: (time: string | null) => void;
+}
+
+const TalentAvailability = ({
+  selectedDate,
+  selectedTime,
+  onSelectDate,
+  onSelectTime,
+}: TalentAvailabilityProps) => {
   const timezone = getUserTimezone();
   const offset = getUtcOffset(timezone);
   const today = new Date();
 
   const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [viewYear, setViewYear] = useState(today.getFullYear());
-  const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
   const calendarDays = useMemo(() => {
     const firstDay = new Date(viewYear, viewMonth, 1).getDay();
@@ -58,15 +69,35 @@ const TalentAvailability = () => {
     return cells;
   }, [viewMonth, viewYear]);
 
-  const getSlotsForDate = (day: number): string[] => {
-    const date = new Date(viewYear, viewMonth, day);
+  const getSlotsForDate = (date: Date): string[] => {
     const dow = date.getDay();
     const utcHours = weeklySlots[dow] ?? [];
     return utcHours.map((h) => formatHour(h + offset));
   };
 
+  const handleDateSelect = (day: number) => {
+    const nextDate = new Date(viewYear, viewMonth, day);
+    const isSameDate =
+      selectedDate !== null && nextDate.toDateString() === selectedDate.toDateString();
+
+    if (isSameDate) {
+      onSelectDate(null);
+      onSelectTime(null);
+      return;
+    }
+
+    onSelectDate(nextDate);
+    onSelectTime(null);
+  };
+
   const isToday = (day: number) =>
     day === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear();
+
+  const isSelectedDate = (day: number) =>
+    selectedDate !== null &&
+    day === selectedDate.getDate() &&
+    viewMonth === selectedDate.getMonth() &&
+    viewYear === selectedDate.getFullYear();
 
   const isPast = (day: number) => {
     const date = new Date(viewYear, viewMonth, day);
@@ -122,12 +153,13 @@ const TalentAvailability = () => {
           if (day === null) return <div key={`empty-${i}`} />;
           const past = isPast(day);
           const hasSlots = !past && (weeklySlots[new Date(viewYear, viewMonth, day).getDay()] ?? []).length > 0;
-          const selected = selectedDate === day;
+          const selected = isSelectedDate(day);
 
           return (
             <button
+              type="button"
               key={day}
-              onClick={() => !past && hasSlots && setSelectedDate(selected ? null : day)}
+              onClick={() => !past && hasSlots && handleDateSelect(day)}
               disabled={past || !hasSlots}
               className={`
                 relative text-xs py-2 transition-all
@@ -151,16 +183,22 @@ const TalentAvailability = () => {
       {selectedDate && (
         <div className="mt-5 pt-4 border-t border-gold-subtle">
           <p className="text-ivory text-xs mb-3 opacity-70">
-            Available times for <span className="text-gold font-medium">{MONTH_NAMES[viewMonth]} {selectedDate}</span>
+            Available times for <span className="text-gold font-medium">{MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getDate()}</span>
           </p>
           <div className="flex flex-wrap gap-2">
             {selectedSlots.map((time) => (
-              <div
+              <button
+                type="button"
                 key={time}
-                className="text-ivory text-xs py-1.5 px-3 border border-gold-subtle bg-primary/5 hover:bg-primary/10 transition-colors cursor-pointer"
+                onClick={() => onSelectTime(selectedTime === time ? null : time)}
+                className={`text-xs py-1.5 px-3 border transition-colors ${
+                  selectedTime === time
+                    ? "border-gold-subtle bg-primary/20 text-gold"
+                    : "border-gold-subtle bg-primary/5 text-ivory hover:bg-primary/10"
+                }`}
               >
                 {time}
-              </div>
+              </button>
             ))}
           </div>
         </div>

@@ -10,7 +10,6 @@ import TalentPricing from "@/components/talent-profile/TalentPricing";
 import TalentAvailability from "@/components/talent-profile/TalentAvailability";
 import TalentReviews from "@/components/talent-profile/TalentReviews";
 import ReviewSessionDialog from "@/components/talent-profile/ReviewSessionDialog";
-import TipPanel from "@/components/TipPanel";
 import { talents } from "@/data/talents";
 import { CheckCircle } from "lucide-react";
 
@@ -26,9 +25,10 @@ const TalentProfile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [booking, setBooking] = useState(false);
   const [booked, setBooked] = useState(false);
-  const [bookedId, setBookedId] = useState<string | null>(null);
   const [unreviewedBooking, setUnreviewedBooking] = useState<UnreviewedBooking | null>(null);
   const [showReviewDialog, setShowReviewDialog] = useState(false);
   const [profileName, setProfileName] = useState("");
@@ -80,9 +80,19 @@ const TalentProfile = () => {
   const getCreditsForDuration = (duration: number) =>
     talent.pricing.find((p) => p.duration === duration)?.credits ?? 0;
 
+  const bookingReady = Boolean(selectedDuration && selectedDate && selectedTime);
+  const selectedDateLabel = selectedDate
+    ? selectedDate.toLocaleDateString(undefined, {
+        weekday: "short",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "";
+
   const handleBook = async () => {
     if (!user) { navigate("/login"); return; }
-    if (!selectedDuration) return;
+    if (!selectedDuration || !selectedDate || !selectedTime) return;
 
     const credits = getCreditsForDuration(selectedDuration);
     setBooking(true);
@@ -107,7 +117,6 @@ const TalentProfile = () => {
       return;
     }
 
-    setBookedId(data as string);
     setBooked(true);
   };
 
@@ -122,15 +131,12 @@ const TalentProfile = () => {
             <p className="text-ivory text-sm leading-relaxed mb-2 opacity-80">
               Your {selectedDuration}-minute session with {talent.name} has been confirmed.
             </p>
-            <p className="text-gold text-sm mb-6">
-              {getCreditsForDuration(selectedDuration!).toLocaleString()} credits deducted
-            </p>
-
-            {bookedId && (
-              <div className="mb-8">
-                <TipPanel bookingId={bookedId} talentId={talent.id} talentName={talent.name} />
-              </div>
-            )}
+            <div className="mb-6 space-y-2 text-sm opacity-80">
+              <p className="text-ivory"><span className="text-gold">Date:</span> {selectedDateLabel}</p>
+              <p className="text-ivory"><span className="text-gold">Time:</span> {selectedTime}</p>
+              <p className="text-ivory"><span className="text-gold">Session:</span> {selectedDuration} minutes</p>
+              <p className="text-ivory"><span className="text-gold">Credits:</span> {getCreditsForDuration(selectedDuration!).toLocaleString()} deducted</p>
+            </div>
 
             <Link to="/talents" className="btn-gold-outline text-xs py-2 px-8">Browse More Talents</Link>
           </div>
@@ -155,7 +161,12 @@ const TalentProfile = () => {
             selectedDuration={selectedDuration}
             onSelect={setSelectedDuration}
           />
-          <TalentAvailability />
+          <TalentAvailability
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            onSelectDate={setSelectedDate}
+            onSelectTime={setSelectedTime}
+          />
         </div>
       </section>
 
@@ -192,13 +203,17 @@ const TalentProfile = () => {
       <div className="sticky bottom-0 bg-card-dark border-t border-gold-subtle py-4 px-6 z-40">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="text-ivory text-sm opacity-70">
-            {selectedDuration
-              ? `${selectedDuration} min — ${getCreditsForDuration(selectedDuration).toLocaleString()} credits`
-              : "Select a session length above"}
+            {bookingReady
+              ? `${selectedDuration} min — ${selectedDateLabel} at ${selectedTime} — ${getCreditsForDuration(selectedDuration!).toLocaleString()} credits`
+              : selectedDuration && selectedDate
+                ? `Choose a time slot — ${selectedDuration} min selected`
+                : selectedDuration
+                  ? `Select a date and time — ${selectedDuration} min selected`
+                  : "Select a session length, date, and time"}
           </div>
           <button
             onClick={handleBook}
-            disabled={!selectedDuration || booking}
+            disabled={!bookingReady || booking}
             className="btn-gold-solid text-xs disabled:opacity-40"
           >
             {booking ? "Booking..." : "Book Session"}
