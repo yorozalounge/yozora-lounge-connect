@@ -86,7 +86,18 @@ const CallScreen = () => {
     setLastGift(amount);
     toast({
       title: `${amount.toLocaleString()} credits sent!`,
-      description: `${booking.talent_name} received ${(amount / 2).toLocaleString()} credits.`,
+      description: `Your gift has been sent to ${booking.talent_name} 🌙`,
+```
+
+Also find this line showing "Creator receives 50%":
+```
+Creator receives 50%
+```
+Delete it entirely.
+
+Also find this line showing "Creator receives 60%":
+```
+Creator receives 60%
     });
     setTimeout(() => setLastGift(null), 2500);
   };
