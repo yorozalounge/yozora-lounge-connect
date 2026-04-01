@@ -1,8 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TalentCard from "@/components/TalentCard";
 import { talents } from "@/data/talents";
+import { supabase } from "@/integrations/supabase/client";
 
 type SortOption = "default" | "price-high" | "price-low";
 
@@ -11,6 +12,15 @@ const allCountries = [...new Set(talents.map((t) => t.country))].sort();
 const TalentsPage = () => {
   const [sort, setSort] = useState<SortOption>("default");
   const [selectedCountry, setSelectedCountry] = useState<string>("all");
+  const [approvedCount, setApprovedCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    supabase
+      .from("talent_applications")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "approved")
+      .then(({ count }) => setApprovedCount(count ?? null));
+  }, []);
 
   const filtered = useMemo(() => {
     let list = [...talents];
@@ -64,7 +74,7 @@ const TalentsPage = () => {
             </div>
           </div>
 
-          <span className="small-caps-gold">{filtered.length} Talent{filtered.length !== 1 ? "s" : ""} Available</span>
+          <span className="small-caps-gold">{approvedCount !== null ? approvedCount : filtered.length} Talent{(approvedCount !== null ? approvedCount : filtered.length) !== 1 ? "s" : ""} Available</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
