@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Gift, ArrowLeft, Sparkles } from "lucide-react";
+import { Gift, ArrowLeft, Sparkles, Clock, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -11,6 +11,11 @@ const GIFT_OPTIONS = [
   { amount: 3000, label: "3K", icon: "💎" },
   { amount: 10000, label: "10K", icon: "👑" },
   { amount: 30000, label: "30K", icon: "🌟" },
+];
+
+const EXTENSION_OPTIONS = [
+  { minutes: 10, label: "+10 min" },
+  { minutes: 20, label: "+20 min" },
 ];
 
 const CallScreen = () => {
