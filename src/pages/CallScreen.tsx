@@ -49,7 +49,7 @@ const CallScreen = () => {
       if (!user || !bookingId) return;
       const { data } = await supabase
         .from("bookings")
-        .select("id, talent_id, talent_name, client_id, room_url")
+        .select("id, talent_id, talent_name, client_id, room_url, credits_charged, duration_minutes")
         .eq("id", bookingId)
         .single();
       setBooking(data);
