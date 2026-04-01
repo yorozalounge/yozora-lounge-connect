@@ -121,7 +121,7 @@ const CallScreen = () => {
       return;
     }
 
-    const cost = perMinuteRate * minutes;
+    const cost = getExtensionCost(minutes);
     setBooking((prev) =>
       prev ? { ...prev, duration_minutes: prev.duration_minutes + minutes } : prev
     );
